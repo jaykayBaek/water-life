@@ -2,7 +2,7 @@ package com.waterlife.entity;
 
 import com.waterlife.entity.enums.Gender;
 import com.waterlife.entity.enums.Ranking;
-import lombok.Getter;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
@@ -11,10 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
+import static lombok.AccessLevel.*;
 
 @Slf4j
-@Entity
-@Getter
+@Entity @Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = PROTECTED)
 public class Member extends BaseEntity{
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -36,6 +39,7 @@ public class Member extends BaseEntity{
 
     private String memberName;
     private String age;
+
     @Column(length = 4)
     private Integer birthYear;
 
