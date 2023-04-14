@@ -2,22 +2,22 @@ package com.waterlife.entity;
 
 import com.waterlife.entity.enums.Gender;
 import com.waterlife.entity.enums.Ranking;
-import lombok.*;
-import lombok.extern.slf4j.Slf4j;
+import com.waterlife.service.MemberRegisterForm;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
-import static lombok.AccessLevel.*;
+import static lombok.AccessLevel.PRIVATE;
+import static lombok.AccessLevel.PROTECTED;
 
-@Slf4j
 @Entity @Getter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
+@Setter(PRIVATE)
 public class Member extends BaseEntity{
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -52,4 +52,21 @@ public class Member extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private Ranking ranking;
     private int levelPoint;
+
+    /* --- 생성 메소드 --- */
+    public static Member createMember(MemberRegisterForm form){
+        Member member = new Member();
+        member.setLoginId(form.getLoginId());
+        member.setPassword(form.getPassword());
+        member.setEmail(form.getEmail());
+        member.setLastVisitedIp(form.getLastVisitedIp());
+        member.setMemberName(form.getMemberName());
+        member.setAge(form.getAge());
+        member.setBirthYear(form.getBirthYear());
+        member.setGender(form.getGender());
+        member.setPhoneNo(form.getPhoneNo());
+        member.setRanking(Ranking.BRONZE);
+        member.setLevelPoint(0);
+        return member;
+    }
 }

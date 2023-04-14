@@ -1,4 +1,4 @@
 package com.waterlife.controller;
 
-public class MemberController {
+public class ControllerAdvisor {
 }
