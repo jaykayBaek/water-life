@@ -28,6 +28,6 @@ public class Comment extends BaseEntity {
 
     private String content;
 
-    private int like;
-    private int dislike;
+    private int likes;
+    private int dislikes;
 }

@@ -12,8 +12,7 @@ import static javax.persistence.FetchType.*;
 import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
-@Entity
-@Getter
+@Entity @Getter
 @NoArgsConstructor(access = PROTECTED)
 public class Board extends BaseEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
@@ -25,10 +24,10 @@ public class Board extends BaseEntity {
     private Member member;
 
     @OneToMany(mappedBy = "board")
-    private List<Comment> Comments = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
 
     private String content;
 
-    private int like;
-    private int dislike;
+    private int likes;
+    private int dislikes;
 }
