@@ -53,7 +53,7 @@ class MemberServiceTest {
         //then
         assertThatThrownBy(()-> memberService.validateForm(form))
                 .isInstanceOf(MemberException.class)
-                .hasMessageContaining(MemberErrorResult.PASSWORD_NOT_MATCH.getMessage());
+                .hasMessageContaining(MemberErrorResult.LOGIN_INFO_NOT_MATCH.getMessage());
     }
 
     @Test
@@ -73,4 +73,47 @@ class MemberServiceTest {
         assertThat(findMember.getPassword()).isEqualTo(form.getPassword());
 
     }
+
+    @Test
+    void login_fail_loginId_not_match() {
+        //given
+        MemberRegisterForm form = new MemberRegisterForm();
+        form.setLoginId("test");
+        form.setPassword("1234");
+        form.setPasswordConfirm("1234");
+
+        memberService.register(form);
+
+        //when
+        LoginForm loginForm = new LoginForm();
+        loginForm.setLoginId("test1");
+        loginForm.setPassword("1234");
+
+        assertThatThrownBy(()-> memberService.login(loginForm))
+                .isInstanceOf(MemberException.class)
+                .hasMessageContaining(MemberErrorResult.LOGIN_INFO_NOT_MATCH.getMessage());
+
+    }
+
+    @Test
+    void login_fail_password_not_match() {
+        //given
+        MemberRegisterForm form = new MemberRegisterForm();
+        form.setLoginId("test");
+        form.setPassword("1234");
+        form.setPasswordConfirm("1234");
+
+        memberService.register(form);
+
+        //when
+        LoginForm loginForm = new LoginForm();
+        loginForm.setLoginId("test");
+        loginForm.setPassword("12345");
+
+        assertThatThrownBy(()-> memberService.login(loginForm))
+                .isInstanceOf(MemberException.class)
+                .hasMessageContaining(MemberErrorResult.LOGIN_INFO_NOT_MATCH.getMessage());
+
+    }
+
 }

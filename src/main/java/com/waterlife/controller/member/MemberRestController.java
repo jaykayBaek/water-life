@@ -1,6 +1,7 @@
 package com.waterlife.controller.member;
 
 import com.waterlife.controller.ResultResponse;
+import com.waterlife.service.LoginForm;
 import com.waterlife.service.MemberRegisterForm;
 import com.waterlife.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,22 @@ public class MemberRestController {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
+                .body(resultResponse);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ResultResponse> login(LoginForm form){
+
+        memberService.login(form);
+
+        ResultResponse resultResponse = ResultResponse.builder()
+                .CODE(HttpStatus.OK.toString())
+                .MESSAGE(MemberRequestResult.REGISTER_SUCCESS.getMessage())
+                .SUCCESS(true)
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
                 .body(resultResponse);
     }
 

@@ -1,13 +1,13 @@
 package com.waterlife.service;
 
 import com.waterlife.entity.Member;
-import com.waterlife.entity.enums.Ranking;
 import com.waterlife.exception.member.MemberErrorResult;
 import com.waterlife.exception.member.MemberException;
 import com.waterlife.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public Long register(MemberRegisterForm form){
@@ -30,6 +30,19 @@ public class MemberService {
         Member member = Member.createMember(form);
         Member savedMember = memberRepository.save(member);
         return savedMember.getId();
+    }
+
+    public void login(LoginForm form){
+        String loginId = form.getLoginId();
+
+        Member findMember = memberRepository.findByLoginId(loginId)
+                .orElseThrow(()->new MemberException(MemberErrorResult.LOGIN_INFO_NOT_MATCH));
+
+        boolean result = passwordEncoder.matches(form.getPassword(), findMember.getPassword());
+
+        if(result == false){
+            throw new MemberException(MemberErrorResult.LOGIN_INFO_NOT_MATCH);
+        }
     }
 
     private void passwordEncode(MemberRegisterForm form) {
@@ -46,7 +59,7 @@ public class MemberService {
         }
 
         if(isPasswordNotMatch(form)){
-            throw new MemberException(MemberErrorResult.PASSWORD_NOT_MATCH);
+            throw new MemberException(MemberErrorResult.LOGIN_INFO_NOT_MATCH);
         }
 
     }
