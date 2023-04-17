@@ -7,6 +7,7 @@ import com.waterlife.exception.member.MemberException;
 import com.waterlife.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,13 +19,22 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Transactional
     public Long register(MemberRegisterForm form){
         validateForm(form);
+
+        passwordEncode(form);
+
         Member member = Member.createMember(form);
         Member savedMember = memberRepository.save(member);
         return savedMember.getId();
+    }
+
+    private void passwordEncode(MemberRegisterForm form) {
+        String encodedPassword = passwordEncoder.encode(form.getPassword());
+        form.encodePassword(encodedPassword);
     }
 
     public void validateForm(MemberRegisterForm form) {

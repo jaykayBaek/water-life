@@ -24,4 +24,7 @@ public class MemberRegisterForm {
     private Gender gender;
     private String phoneNo;
 
+    public void encodePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
 }
