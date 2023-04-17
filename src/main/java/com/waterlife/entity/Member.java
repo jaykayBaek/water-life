@@ -40,7 +40,6 @@ public class Member extends BaseEntity{
     private String lastVisitedIp;
 
     private String memberName;
-    private String age;
 
     @Column(length = 4)
     private Integer birthYear;
@@ -61,7 +60,6 @@ public class Member extends BaseEntity{
         member.setEmail(form.getEmail());
         member.setLastVisitedIp(form.getLastVisitedIp());
         member.setMemberName(form.getMemberName());
-        member.setAge(form.getAge());
         member.setBirthYear(form.getBirthYear());
         member.setGender(form.getGender());
         member.setPhoneNo(form.getPhoneNo());

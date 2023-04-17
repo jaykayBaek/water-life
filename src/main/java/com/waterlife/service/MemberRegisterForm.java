@@ -17,7 +17,6 @@ public class MemberRegisterForm {
     private String lastVisitedIp;
 
     private String memberName;
-    private String age;
 
     private Integer birthYear;
 
