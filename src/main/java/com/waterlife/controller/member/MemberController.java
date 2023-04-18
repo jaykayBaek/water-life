@@ -16,6 +16,6 @@ public class MemberController {
 
     @GetMapping("/register")
     public String registerForm(){
-        return "";
+        return "member/signup";
     }
 }
