@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="header">
+  <header id="head" class="container">
+    <img th:src="@{/image/mainlogo.png}" alt="메인로고">
+    <div class="search-form text-center">
+      <input type="text">
+      <button>검색</button>
+    </div>
+
+  </header>
+  <nav class="navbar navbar-expand-lg bg-primary">
+    <div class="container">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link text-white" href="#">추천 게시판</a>
+          <a class="nav-link text-white" href="#">콘테스트</a>
+          <a class="nav-link text-white" href="#">어항 사진</a>
+          <a class="nav-link text-white" href="#">일반</a>
+          <a class="nav-link text-white" href="#">질문</a>
+          <a class="nav-link text-white" href="#">방문기</a>
+          <a class="nav-link text-white" href="#">분양</a>
+          <a class="nav-link text-white" href="#">공지사항</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+</th:block>

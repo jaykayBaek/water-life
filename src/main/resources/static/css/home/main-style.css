@@ -1,0 +1,93 @@
+body{
+    font-family: 'Pretendard';
+}
+.main #head{
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.search-form button{
+    background-color: var(--maincolor);
+    border-color: transparent;
+    border-radius: 3px;
+    color: #fff;
+}
+
+
+/*--- 게시판 ---*/
+
+/*--- 오른쪽 nav ---*/
+.login__wrap{
+    border: 1px solid var(--maincolor);
+    width: 248px;
+    height: 158px;
+}
+.login__wrap form{
+    padding: 0 14px;
+}
+
+.login__wrap form .login__box{
+    padding: 14px 0;
+}
+
+.login__wrap form .btn__wrap{
+    padding: 14px 0;
+}
+
+
+.login__wrap form .btn__wrap .rem__wrap{
+    height: 37px;
+    margin-top: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+.login__wrap form .btn__wrap label{
+    font-size: 11px;
+    padding-left: 1px;
+}
+
+.login__wrap form .btn__wrap button{
+    width: 65px;
+    height: 37px;
+    margin-top: 7px;
+    font-size: 14px;
+    border: none;
+    background-color: transparent;
+}
+
+.login__wrap form .btn__wrap .login{
+    border: 1px solid #000;
+}
+
+.login__wrap form .btn__wrap .register{
+    color: #fff;
+    background-color: var(--mainred);
+}
+
+.login__box input{
+    margin: 7px 0 0;
+    width: 132px;
+    height: 36px;
+    padding: 0 3px 0 6px;
+    font-size: 14px;
+    color: #555;
+    border: none;
+    background: var(--grey);
+}
+
+.login__wrap .find__wrap{
+    margin: 7px;
+    padding: 0 7px;
+    border-top: 1px dashed #aaa;
+}
+
+.login__wrap .find__wrap a{
+    font-size: 11px;
+    text-decoration: none;
+    color: #555;
+    padding-bottom: 14px;
+}

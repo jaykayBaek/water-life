@@ -1,11 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>슬기로운 물생활</title>
 
+    <th:block th:replace="~{common/common-setting :: common-setting}"></th:block>
 </head>
 <body>
+    <div class="main">
 
+        <th:block th:replace="~{common/header :: header}"></th:block>
+
+        <article class="container mt-3">
+            <div class="row">
+                <div class="col-10">
+                    ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ
+                </div>
+                <div class="col-2">
+                    <th:block th:replace="common/login :: login"></th:block>
+                </div>
+            </div>
+        </article>
+        <footer class="text-center mt-3">
+            <span>Copyright © jaykaybaek@gmail.com All rights reserved.</span>
+        </footer>
+    </div>
 </body>
 </html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="login">
+  <div class="login__wrap">
+    <form class="d-flex" action="">
+      <div class="login__box">
+        <input type="text" name="loginId" placeholder="아이디">
+        <input type="password" name="passwordr" placeholder="비밀번호">
+      </div>
+      <div class="btn__wrap">
+        <div class="rem__wrap">
+          <input type="checkbox" name="loginIdRem" id="loginIdRem">
+          <label for="loginIdRem">
+            아이디 저장
+          </label>
+        </div>
+        <button class="login">로그인</button>
+      </div>
+    </form>
+    <div class="find__wrap">
+      <a href="">아이디 찾기</a>
+      <a href="">비밀번호 찾기</a>
+      <a th:href="@{/members/register}">
+        <strong>
+          회원 가입
+        </strong>
+      </a>
+    </div>
+  </div>
+</th:block>

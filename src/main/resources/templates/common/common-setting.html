@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="common-setting">
+  <!--  기본 css & js 설정  -->
+  <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.css}" type="text/css">
+  <script th:src="@{/bootstrap/js/bootstrap.js}"></script>
+  <script th:src="@{/jquery/jquery-3.6.4.min.js}"></script>
+
+  <!--  pretendard font cdn  -->
+  <link rel="stylesheet" type="text/css" href='https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css'>
+
+  <!--  css  -->
+  <link rel="stylesheet" th:href="@{/css/home/main-style.css}" type="text/css">
+  <link rel="stylesheet" th:href="@{/css/root-css.css}" type="text/css">
+</th:block>
