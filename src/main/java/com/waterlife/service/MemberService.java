@@ -52,11 +52,8 @@ public class MemberService {
 
     public void validateForm(MemberRegisterForm form) {
         String loginId = form.getLoginId();
-        Optional<Member> findMemberByLoginId = memberRepository.findByLoginId(loginId);
 
-        if(findMemberByLoginId.isPresent()){
-            throw new MemberException(MemberErrorResult.DUPLICATED_LOGIN_ID);
-        }
+        validateLoginId(loginId);
 
         if(isPasswordNotMatch(form)){
             throw new MemberException(MemberErrorResult.LOGIN_INFO_NOT_MATCH);
@@ -68,4 +65,11 @@ public class MemberService {
         return !form.getPassword().equals(form.getPasswordConfirm());
     }
 
+    public void validateLoginId(String loginId) {
+        Optional<Member> findMemberByLoginId = memberRepository.findByLoginId(loginId);
+
+        if(findMemberByLoginId.isPresent()){
+            throw new MemberException(MemberErrorResult.DUPLICATED_LOGIN_ID);
+        }
+    }
 }
