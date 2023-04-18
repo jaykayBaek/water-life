@@ -26,4 +26,8 @@ public class MemberRegisterForm {
     public void encodePassword(String encodedPassword) {
         this.password = encodedPassword;
     }
+
+    public void updateLastVisitedIp(String lastVisitedIp){
+        this.lastVisitedIp = lastVisitedIp;
+    }
 }
