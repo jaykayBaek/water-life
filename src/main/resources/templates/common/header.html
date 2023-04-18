@@ -2,7 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="header">
   <header id="head" class="container">
-    <img th:src="@{/image/mainlogo.png}" alt="메인로고">
+    <a th:href="@{/}">
+      <img th:src="@{/image/mainlogo.png}" alt="메인로고">
+    </a>
     <div class="search-form text-center">
       <input type="text">
       <button>검색</button>

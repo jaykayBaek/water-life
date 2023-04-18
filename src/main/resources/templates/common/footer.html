@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="footer">
+  <footer>
+    <div class="footer__bottom__wrap container">
+      <div class="footer__bottom-right mb-1">
+        <div class="footer-block d-flex align-content-center">
+          <a th:href="@{/}">
+            <img src="/image/mainlogo-invert.png" alt="슬기로운 물생활 로고">
+          </a>
+        </div>
+        <div class="footer-block">
+          개발자: 백정광 | jaykaybaek@gmail.com<br/>
+        </div>
+        <div class="footer-block">
+          <span>Copyright © jaykaybaek@gmail.com All rights reserved.</span>
+        </div>
+      </div>
+      <div class="footer__bottom-left">
+        <a href="https://github.com/jaykayBaek">
+          <i class="fa-brands fa-github"></i>
+        </a>
+        <a href="mailto:jaykaybaek@gmail.com">
+          <i class="fa-sharp fa-solid fa-envelope-open-text"></i>
+        </a>
+        <a href="https://jaykaybaek.tistory.com/">
+          <i class="fa-brands fa-blogger"></i>
+        </a>
+      </div>
+    </div>
+  </footer>
+</th:block>
