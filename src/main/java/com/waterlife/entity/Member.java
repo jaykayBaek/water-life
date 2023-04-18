@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,9 +63,11 @@ public class Member extends BaseEntity{
         member.setMemberName(form.getMemberName());
         member.setBirthYear(form.getBirthYear());
         member.setGender(form.getGender());
+        member.setLastEditedTime(LocalDateTime.now());
         member.setPhoneNo(form.getPhoneNo());
         member.setRanking(Ranking.BRONZE);
         member.setLevelPoint(0);
         return member;
     }
+
 }
