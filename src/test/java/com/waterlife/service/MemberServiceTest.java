@@ -142,4 +142,22 @@ class MemberServiceTest {
 
     }
 
+    @Test
+    void login_id_find_fail_not_found() {
+        //given
+        MemberRegisterForm form = new MemberRegisterForm();
+        form.setLoginId("test");
+        form.setPassword("1234");
+        form.setPasswordConfirm("1234");
+        form.setEmail("test");
+
+        memberService.register(form);
+
+        //then
+        String email = "hello";
+        assertThatThrownBy(()-> memberService.findLoginId(email))
+                .isInstanceOf(MemberException.class)
+                .hasMessageContaining(MemberErrorResult.EMAIL_NOT_FOUND.getMessage());
+
+    }
 }

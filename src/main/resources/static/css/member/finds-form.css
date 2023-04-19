@@ -1,0 +1,39 @@
+.finds__form{
+    margin: 64px auto auto;
+    width: 360px;
+    height: 100vh;
+}
+.finds__input-block{
+    margin-bottom: 16px;
+}
+
+.finds__form .finds__input-block label{
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.finds__form .finds__input-block input{
+    margin-top: 4px;
+    width: 100%;
+    padding: 12px;
+    height: 48px;
+    font-size: 15px;
+    border: 1px solid var(--grey);
+    border-radius: 3px;
+    background-color: #fff;
+}
+
+.finds__form button.findId{
+    width: 100%;
+    height: 48px;
+    background-color: var(--maincolor);
+    color: #fff;
+    border: 0;
+    border-radius: 3px;
+}
+
+.content__wrap a{
+    font-size: 14px;
+    text-decoration: none;
+    color: var(--maincolor)
+}

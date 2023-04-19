@@ -64,4 +64,18 @@ public class MemberRestController {
                 .status(HttpStatus.CREATED)
                 .body(resultResponse);
     }
+
+    @PostMapping("/finds/id")
+    public ResponseEntity<ResultResponse> findLoginId(@RequestParam String email){
+        String maskedLoginId = memberService.findLoginId(email);
+
+        FindLoginIdResultResponse resultResponse = new FindLoginIdResultResponse(
+                HttpStatus.OK.toString(), MemberRequestResult.FIND_LOGIN_ID_SUCCESS.getMessage(), true,
+                maskedLoginId
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(resultResponse);
+    }
 }

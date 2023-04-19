@@ -91,4 +91,12 @@ public class MemberService {
                 .orElseThrow(() -> new MemberException(MemberErrorResult.MEMBER_NOT_FOUND));
         return MemberInformationResponse.createResponse(member);
     }
+
+    public String findLoginId(String email) {
+        Member findMember = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new MemberException(MemberErrorResult.EMAIL_NOT_FOUND));
+
+        String loginId = findMember.getLoginId();
+        return loginId.replaceAll("(?<=.{4}).", "*");
+    }
 }

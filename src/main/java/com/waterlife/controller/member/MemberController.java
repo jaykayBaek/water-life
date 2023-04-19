@@ -18,4 +18,14 @@ public class MemberController {
     public String registerForm(){
         return "member/signup";
     }
+
+    @GetMapping("/finds/id")
+    public String findLoginId(){
+        return "member/findsId";
+    }
+
+    @GetMapping("/finds/password")
+    public String findPassword(){
+        return "member/findsPassword";
+    }
 }
