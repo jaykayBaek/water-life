@@ -33,14 +33,12 @@ public class Member extends BaseEntity{
 
     @Column(length = 20)
     private String loginId;
-
     private String password;
-
     private String email;
-
     private String lastVisitedIp;
 
     private String memberName;
+    private String nickname;
 
     @Column(length = 4)
     private Integer birthYear;
@@ -65,6 +63,7 @@ public class Member extends BaseEntity{
         member.setGender(form.getGender());
         member.setLastEditedTime(LocalDateTime.now());
         member.setPhoneNo(form.getPhoneNo());
+        member.setNickname(form.getMemberName());
         member.setRanking(Ranking.BRONZE);
         member.setLevelPoint(0);
         return member;
