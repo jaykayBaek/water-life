@@ -1,5 +1,6 @@
 package com.waterlife.controller.member;
 
+import com.waterlife.controller.FindLoginIdResultResponse;
 import com.waterlife.controller.ResultResponse;
 import com.waterlife.service.MemberRegisterForm;
 import com.waterlife.service.MemberService;
@@ -27,11 +28,9 @@ public class MemberRestController {
 
         memberService.register(form);
 
-        ResultResponse resultResponse = ResultResponse.builder()
-                .CODE(HttpStatus.CREATED.toString())
-                .MESSAGE(MemberRequestResult.REGISTER_SUCCESS.getMessage())
-                .SUCCESS(true)
-                .build();
+        ResultResponse resultResponse = new ResultResponse(
+                HttpStatus.CREATED.toString(), MemberRequestResult.REGISTER_SUCCESS.getMessage(), true
+        );
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -42,30 +41,27 @@ public class MemberRestController {
     public ResponseEntity<ResultResponse> checkLoginId(@RequestParam String loginId){
         memberService.validateLoginId(loginId);
 
-        ResultResponse resultResponse = ResultResponse.builder()
-                .CODE(HttpStatus.OK.toString())
-                .MESSAGE(MemberRequestResult.NOT_DUPLICATED_LOGIN_ID.getMessage())
-                .SUCCESS(true)
-                .build();
+        ResultResponse resultResponse = new ResultResponse(
+                HttpStatus.OK.toString(), MemberRequestResult.NOT_DUPLICATED_LOGIN_ID.getMessage(), true
+        );
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(resultResponse);
+
+
     }
 
     @PostMapping("/register/check/email")
     public ResponseEntity<ResultResponse> checkEmail(@RequestParam String email){
         memberService.validateEmail(email);
 
-        ResultResponse resultResponse = ResultResponse.builder()
-                .CODE(HttpStatus.OK.toString())
-                .MESSAGE(MemberRequestResult.NOT_DUPLICATED_EMAIL.getMessage())
-                .SUCCESS(true)
-                .build();
+        ResultResponse resultResponse = new ResultResponse(
+                HttpStatus.OK.toString(), MemberRequestResult.NOT_DUPLICATED_EMAIL.getMessage(), true
+        );
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(resultResponse);
     }
-
 }
