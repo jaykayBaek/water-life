@@ -55,8 +55,10 @@ public class MemberService {
 
     public void validateForm(MemberRegisterForm form) {
         String loginId = form.getLoginId();
+        String email = form.getEmail();
 
         validateLoginId(loginId);
+        validateEmail(email);
 
         if(isPasswordNotMatch(form)){
             throw new MemberException(MemberErrorResult.LOGIN_INFO_NOT_MATCH);
@@ -76,14 +78,17 @@ public class MemberService {
         }
     }
 
+    public void validateEmail(String email) {
+        Optional<Member> findMemberByEmail = memberRepository.findByEmail(email);
+
+        if(findMemberByEmail.isPresent()){
+            throw new MemberException(MemberErrorResult.DUPLICATED_EMAIL);
+        }
+    }
+
     public MemberInformationResponse findMemberInformation(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new MemberException(MemberErrorResult.MEMBER_NOT_FOUND));
         return MemberInformationResponse.createResponse(member);
     }
-
-//    public Member findById(Long memberId) {
-//        return memberRepository.findById(memberId)
-//                .orElseThrow(()-> new MemberException(MemberErrorResult.MEMBER_NOT_FOUND));
-//    }
 }

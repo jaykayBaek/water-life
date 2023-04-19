@@ -57,6 +57,32 @@ class MemberServiceTest {
     }
 
     @Test
+    void register_fail_duplicate_email() {
+        //given
+        MemberRegisterForm form1 = new MemberRegisterForm();
+        form1.setLoginId("test1");
+        form1.setPassword("1234");
+        form1.setPasswordConfirm("1234");
+        form1.setEmail("test");
+
+        Member member1 = Member.createMember(form1);
+        memberRepository.save(member1);
+
+        //when
+        MemberRegisterForm form2 = new MemberRegisterForm();
+        form2.setLoginId("test2");
+        form2.setPassword("1234");
+        form2.setPasswordConfirm("1234");
+        form2.setEmail("test");
+
+        //then
+        assertThatThrownBy(()-> memberService.register(form2))
+                .isInstanceOf(MemberException.class)
+                .hasMessageContaining(MemberErrorResult.DUPLICATED_EMAIL.getMessage());
+
+    }
+
+    @Test
     void register_success() {
         //given
         MemberRegisterForm form = new MemberRegisterForm();

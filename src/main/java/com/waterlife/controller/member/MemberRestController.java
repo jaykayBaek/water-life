@@ -53,4 +53,19 @@ public class MemberRestController {
                 .body(resultResponse);
     }
 
+    @PostMapping("/register/check/email")
+    public ResponseEntity<ResultResponse> checkEmail(@RequestParam String email){
+        memberService.validateEmail(email);
+
+        ResultResponse resultResponse = ResultResponse.builder()
+                .CODE(HttpStatus.OK.toString())
+                .MESSAGE(MemberRequestResult.NOT_DUPLICATED_EMAIL.getMessage())
+                .SUCCESS(true)
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(resultResponse);
+    }
+
 }

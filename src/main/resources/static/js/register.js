@@ -127,6 +127,24 @@ $(function(){
             return false;
         }
 
+        $.ajax({
+            method: "post",
+            url: "http://localhost:8080/members/register/check/email",
+            data: {
+                email : email
+            },
+            async: false,
+            success: function (result){
+                console.log(result);
+            },
+            error: function (result){
+                const response = result.responseJSON;
+                console.log(response);
+                $('#email__result').html(response.message);
+                isValidatedEmail = false;
+            }
+        })
+
         isValidatedEmail = true;
     });
 
