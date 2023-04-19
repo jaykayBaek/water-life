@@ -3,29 +3,106 @@
 
 <th:block th:fragment="login">
   <div class="login__wrap">
-    <form class="d-flex" action="">
-      <div class="login__box">
-        <input type="text" name="loginId" placeholder="아이디">
-        <input type="password" name="passwordr" placeholder="비밀번호">
-      </div>
-      <div class="btn__wrap">
-        <div class="rem__wrap">
-          <input type="checkbox" name="loginIdRem" id="loginIdRem">
-          <label for="loginIdRem">
-            아이디 저장
-          </label>
+    <th:block th:if="${session.memberId eq null}">
+      <form class="d-flex" id="loginForm">
+        <div class="login__box">
+          <input type="text" name="loginId" id="loginId" placeholder="아이디">
+          <input type="password" name="password" id="password" placeholder="비밀번호">
         </div>
-        <button class="login">로그인</button>
+        <div class="btn__wrap">
+          <div class="rem__wrap">
+            <input type="checkbox" name="loginIdRem" id="loginIdRem">
+            <label for="loginIdRem">
+              아이디 저장
+            </label>
+          </div>
+          <button type="button" id="login">로그인</button>
+        </div>
+      </form>
+
+      <div class="find__wrap">
+        <a href="">아이디 찾기</a>
+        <a href="">비밀번호 찾기</a>
+        <a th:href="@{/members/register}">
+          <strong>
+            회원 가입
+          </strong>
+        </a>
       </div>
-    </form>
-    <div class="find__wrap">
-      <a href="">아이디 찾기</a>
-      <a href="">비밀번호 찾기</a>
-      <a th:href="@{/members/register}">
-        <strong>
-          회원 가입
-        </strong>
-      </a>
-    </div>
+    </th:block>
+    <th:block th:if="${session.memberId ne null}">
+      <div class="member__info__wrap">
+        <div class="member__info-top">
+          <div class="info__box d-flex justify-content-between">
+            <div class="info__right">
+              <b>별명</b>
+              <span th:text="${member.nickname}"></span>
+            </div>
+            <div class="info__left">
+              <b>가입</b>
+              <span th:text="${#strings.substring(member.createdTime, 0, 10)}"></span>
+            </div>
+          </div>
+          <div class="info__box d-flex justify-content-between">
+            <div class="info__right">
+              <b>등급</b>
+              <span th:text="${member.ranking}"></span>
+            </div>
+            <button class="logout">로그아웃</button>
+          </div>
+
+        </div>
+        <div class="member__info-bottom">
+          <button class="write">글쓰기</button>
+          <div class="info__box d-flex justify-content-around">
+            <span>내 정보</span>
+            <span>내가 쓴 글</span>
+            <span>내가 쓴 댓글</span>
+          </div>
+        </div>
+      </div>
+    </th:block>
   </div>
+
+  <script>
+    $(function () {
+      const cookie = $.cookie('loginId');
+      if(cookie != null){
+        $('#loginIdRem').prop("checked", true);
+        $('#loginId').val(cookie);
+      }
+
+      $('#login').on('click', function (){
+        const loginId = $('#loginId').val();
+        const password = $('#password').val();
+        const loginIdRem = $('#loginIdRem').prop('checked') ? true : false;
+
+        if(loginId.trim() == '' || password.trim() == ''){
+          alert('아이디 또는 비밀번호를 확인해주세요.');
+          return false;
+        }
+
+        $.ajax({
+          method: "post",
+          url: "http://localhost:8080/login",
+          data: {
+            loginId : loginId,
+            password: password,
+            loginIdRem: loginIdRem
+          },
+          async: false,
+          success: function (result){
+            console.log(result);
+            location.reload();
+          },
+          error: function (result){
+            const response = result.responseJSON;
+            console.log(response);
+            alert(response.message);
+          }
+        });
+
+      });
+    })
+  </script>
 </th:block>

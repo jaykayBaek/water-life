@@ -1,5 +1,6 @@
 package com.waterlife.service;
 
+import com.waterlife.controller.MemberInformationResponse;
 import com.waterlife.entity.Member;
 import com.waterlife.exception.member.MemberErrorResult;
 import com.waterlife.exception.member.MemberException;
@@ -32,7 +33,7 @@ public class MemberService {
         return savedMember.getId();
     }
 
-    public void login(LoginForm form){
+    public Member login(LoginForm form){
         String loginId = form.getLoginId();
 
         Member findMember = memberRepository.findByLoginId(loginId)
@@ -43,6 +44,8 @@ public class MemberService {
         if(result == false){
             throw new MemberException(MemberErrorResult.LOGIN_INFO_NOT_MATCH);
         }
+
+        return findMember;
     }
 
     private void passwordEncode(MemberRegisterForm form) {
@@ -72,4 +75,15 @@ public class MemberService {
             throw new MemberException(MemberErrorResult.DUPLICATED_LOGIN_ID);
         }
     }
+
+    public MemberInformationResponse findMemberInformation(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(MemberErrorResult.MEMBER_NOT_FOUND));
+        return MemberInformationResponse.createResponse(member);
+    }
+
+//    public Member findById(Long memberId) {
+//        return memberRepository.findById(memberId)
+//                .orElseThrow(()-> new MemberException(MemberErrorResult.MEMBER_NOT_FOUND));
+//    }
 }
