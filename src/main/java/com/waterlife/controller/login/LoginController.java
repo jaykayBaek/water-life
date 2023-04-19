@@ -41,11 +41,9 @@ public class LoginController {
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.MEMBER_ID, member.getId());
 
-        ResultResponse resultResponse = ResultResponse.builder()
-                .CODE(HttpStatus.OK.toString())
-                .MESSAGE(MemberRequestResult.REGISTER_SUCCESS.getMessage())
-                .SUCCESS(true)
-                .build();
+        ResultResponse resultResponse = new ResultResponse(
+                HttpStatus.OK.toString(), MemberRequestResult.REGISTER_SUCCESS.getMessage(), true
+        );
 
         return ResponseEntity
                 .status(HttpStatus.OK)
