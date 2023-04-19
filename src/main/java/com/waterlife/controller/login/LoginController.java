@@ -10,9 +10,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -20,13 +22,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Slf4j
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class LoginController {
 
     private final MemberService memberService;
 
     @PostMapping("/login")
+    @ResponseBody
     public ResponseEntity<ResultResponse> login(@ModelAttribute LoginForm form,
                                                 HttpServletRequest request, HttpServletResponse response){
         log.info("login form = {}", form);
@@ -47,6 +50,14 @@ public class LoginController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(resultResponse);
+    }
+
+    @GetMapping("/members/logout")
+    public String logout(HttpSession session){
+
+        session.invalidate();
+
+        return "redirect:/";
     }
 
     private static void manageCookieAccordingToBoolean(LoginForm form, HttpServletResponse response) {

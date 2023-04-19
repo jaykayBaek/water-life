@@ -123,6 +123,7 @@ footer .footer__bottom__wrap .footer__bottom-left a{
 .member__info__wrap{
     padding: 14px;
     font-size: 14px;
+    color: #555;
 }
 
 .member__info__wrap .member__info-top .info__box button.logout{
@@ -138,4 +139,8 @@ footer .footer__bottom__wrap .footer__bottom-left a{
     background-color: var(--mainred);
     color: #fff;
     margin: 16px 0;
+}
+.member__info-top .info__box a{
+    text-decoration: none;
+    color: #555;
 }
