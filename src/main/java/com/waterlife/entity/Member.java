@@ -69,4 +69,7 @@ public class Member extends BaseEntity{
         return member;
     }
 
+    public void updatePassword(String encodedTempPassword) {
+        this.password = encodedTempPassword;
+    }
 }

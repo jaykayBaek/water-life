@@ -23,7 +23,7 @@
 
       <div class="content__wrap text-center">
         <div class="finds__input-block">
-          <input type="text" id="email" name="email" placeholder="이메일 주소">
+          <input type="email" id="email" name="email" placeholder="이메일 주소">
         </div>
         <button class="findId" id="findId" type="button">아이디 찾기</button>
       </div>
@@ -34,8 +34,15 @@
         $('#findId').on("click", function (){
           const email = $('#email').val();
 
+          const regEmail = /^[\w-\.]{1,25}@([\w-]+\.)+[\w-]{2,4}$/i;
+
           if(email.trim() == ''){
-            alert('이메일을 입력해주세요.');
+            alert('이메일 주소를 입력해주세요.');
+            return false;
+          }
+
+          if(!email.match(regEmail)){
+            alert('이메일 주소를 올바르게 입력해주세요.');
             return false;
           }
 

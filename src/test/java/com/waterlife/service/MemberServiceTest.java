@@ -157,7 +157,7 @@ class MemberServiceTest {
         String email = "hello";
         assertThatThrownBy(()-> memberService.findLoginId(email))
                 .isInstanceOf(MemberException.class)
-                .hasMessageContaining(MemberErrorResult.EMAIL_NOT_FOUND.getMessage());
+                .hasMessageContaining(MemberErrorResult.MEMBER_NOT_FOUND_BY_FIND_LOGIN_ID.getMessage());
 
     }
 }

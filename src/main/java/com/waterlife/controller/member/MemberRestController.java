@@ -78,4 +78,17 @@ public class MemberRestController {
                 .status(HttpStatus.OK)
                 .body(resultResponse);
     }
+
+    @PostMapping("/finds/password")
+    public ResponseEntity<ResultResponse> findPassword(String loginId, String email){
+        memberService.findPasswordAndChangeTempPassword(loginId, email);
+
+        ResultResponse resultResponse = new ResultResponse(
+                HttpStatus.OK.toString(), MemberRequestResult.FIND_PASSWORD_SUCCESS.getMessage(), true
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(resultResponse);
+    }
 }
