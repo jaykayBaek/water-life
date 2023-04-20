@@ -55,7 +55,7 @@ public class MyInfoRestController {
         memberService.updateNickname(memberId, nickname);
 
         ResultResponse resultResponse = new ResultResponse(
-                HttpStatus.OK.toString(), MemberRequestResult.CHANGE_SUCCESS_PASSWORD.getMessage(), true
+                HttpStatus.OK.toString(), MemberRequestResult.CHANGE_SUCCESS_NICKNAME.getMessage(), true
         );
 
         return ResponseEntity

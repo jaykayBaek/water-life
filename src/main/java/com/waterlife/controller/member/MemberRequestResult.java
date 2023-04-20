@@ -1,6 +1,5 @@
 package com.waterlife.controller.member;
 
-import com.sun.mail.imap.IMAPFolder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -13,7 +12,8 @@ public enum MemberRequestResult {
     FIND_LOGIN_ID_SUCCESS("아이디 찾기 성공"),
     FIND_PASSWORD_SUCCESS("비밀번호 찾기 성공"),
     CONFIRM_PASSWORD_SUCCESS("비밀번호 확인 성공"),
-    CHANGE_SUCCESS_PASSWORD("비밀번호 변경이 완료되었습니다.")
+    CHANGE_SUCCESS_PASSWORD("비밀번호 변경이 완료되었습니다."),
+    CHANGE_SUCCESS_NICKNAME("닉네임 변경이 완료되었습니다."),
     ;
     private final String message;
 }

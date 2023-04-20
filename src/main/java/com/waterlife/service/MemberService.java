@@ -238,7 +238,10 @@ public class MemberService {
      * @param memberId
      * @param nickname
      */
+    @Transactional
     public void updateNickname(Long memberId, String nickname) {
         Member findMember = findMemberByMemberId(memberId);
+
+        findMember.updateNickname(nickname);
     }
 }
