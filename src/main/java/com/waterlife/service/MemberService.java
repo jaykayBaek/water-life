@@ -244,4 +244,16 @@ public class MemberService {
 
         findMember.updateNickname(nickname);
     }
+
+    /**
+     * 이메일 변경 메소드
+     * @param memberId
+     * @param email
+     */
+    @Transactional
+    public void updateEmail(Long memberId, String email) {
+        Member findMember = findMemberByMemberId(memberId);
+
+        findMember.updateEmail(email);
+    }
 }

@@ -62,4 +62,19 @@ public class MyInfoRestController {
                 .status(HttpStatus.OK)
                 .body(resultResponse);
     }
+
+    @PatchMapping("/my-info/email")
+    public ResponseEntity<ResultResponse> updateEmail(@SessionAttribute(name = SessionConst.MEMBER_ID, required = false) Long memberId,
+                                                         String email){
+        memberService.validateEmail(email);
+        memberService.updateEmail(memberId, email);
+
+        ResultResponse resultResponse = new ResultResponse(
+                HttpStatus.OK.toString(), MemberRequestResult.CHANGE_SUCCESS_EMAIL.getMessage(), true
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(resultResponse);
+    }
 }

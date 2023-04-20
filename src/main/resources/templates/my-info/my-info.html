@@ -90,6 +90,39 @@
       }
     });
   }
+
+  const emailChange = () => {
+    const email = $('#email').val();
+    const regEmail = /^[\w-\.]{1,25}@([\w-]+\.)+[\w-]{2,4}$/i;
+
+    if(email.trim() == ''){
+      alert('이메일을 입력해주세요.');
+      return false;
+    }
+
+    if(!email.match(regEmail)){
+      alert('이메일 주소를 올바르게 입력하세요.');
+      return false;
+    }
+
+    $.ajax({
+      method: "patch",
+      url: "http://localhost:8080/my-info/email",
+      data: {
+        email : email
+      },
+      async: false,
+      success: function (result){
+        console.log(result);
+        alert(result.message);
+      },
+      error: function (result){
+        const response = result.responseJSON;
+        console.log(response);
+        alert(response.message);
+      }
+    });
+  }
 </script>
 
 <body>
@@ -162,7 +195,7 @@
                       '     <th>이메일 주소</th>' +
                       '     <td>' +
                       '       <input type="email" id="email" value="'+result.response.email+'">' +
-                      '       <button class="change" type="button" id="email-change">이메일 주소 변경</button>' +
+                      '       <button class="change" type="button" id="email-change" onclick="emailChange()">이메일 주소 변경</button>' +
                       '     </td>' +
                       '   </tr>' +
                       '   <tr>' +

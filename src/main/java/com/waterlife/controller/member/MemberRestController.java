@@ -63,7 +63,7 @@ public class MemberRestController {
         );
 
         return ResponseEntity
-                .status(HttpStatus.CREATED)
+                .status(HttpStatus.OK)
                 .body(resultResponse);
     }
 
