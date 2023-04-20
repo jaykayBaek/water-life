@@ -22,7 +22,7 @@ $(function(){
         if(loginId.match(regLoginId)) {
             $.ajax({
                 method: "post",
-                url: "http://localhost:8080/members/register/check/loginId",
+                url: "http://localhost:8080/members/register/check/login-id",
                 data: {
                     loginId : loginId
                 },

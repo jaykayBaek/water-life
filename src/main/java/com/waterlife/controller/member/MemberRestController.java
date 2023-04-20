@@ -39,7 +39,7 @@ public class MemberRestController {
                 .body(resultResponse);
     }
 
-    @PostMapping("/register/check/loginId")
+    @PostMapping("/register/check/login-id")
     public ResponseEntity<ResultResponse> checkLoginId(@RequestParam String loginId){
         memberService.validateLoginId(loginId);
 
