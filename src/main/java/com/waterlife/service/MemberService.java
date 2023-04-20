@@ -21,7 +21,7 @@ import java.util.UUID;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final EmailSendService emailSendService;
+    private final MailUtil mailUtil;
 
     /**
      * 회원가입 메소드
@@ -32,7 +32,8 @@ public class MemberService {
     public Long register(MemberRegisterForm form){
         validateForm(form);
 
-        passwordEncode(form);
+        String encodedPassword = encodePassword(form.getPassword());
+        form.encodePassword(encodedPassword);
 
         Member member = Member.createMember(form);
         Member savedMember = memberRepository.save(member);
@@ -62,9 +63,8 @@ public class MemberService {
     }
     
     /* --- 비밀번호 암호화 메소드 --- */
-    private void passwordEncode(MemberRegisterForm form) {
-        String encodedPassword = passwordEncoder.encode(form.getPassword());
-        form.encodePassword(encodedPassword);
+    private String encodePassword(String password) {
+        return passwordEncoder.encode(password);
     }
     
     /* --- form dto 검증 메소드 --- */
@@ -75,15 +75,22 @@ public class MemberService {
         validateLoginId(loginId);
         validateEmail(email);
 
-        if(isPasswordNotMatch(form)){
-            throw new MemberException(MemberErrorResult.LOGIN_INFO_NOT_MATCH);
-        }
+        String password = form.getPassword();
+        String passwordConfirm = form.getPasswordConfirm();
 
+        validatePasswords(password, passwordConfirm, MemberErrorResult.LOGIN_INFO_NOT_MATCH);
     }
-    
-    /* --- if문 리펙토링 메소드 --- */
-    private static boolean isPasswordNotMatch(MemberRegisterForm form) {
-        return !form.getPassword().equals(form.getPasswordConfirm());
+
+    /* --- if문 리펙토링 메소드(비밀번호 2개 비교) --- */
+    private static boolean isPasswordNotMatch(String password, String passwordConfirm) {
+        return !password.equals(passwordConfirm);
+    }
+
+    /* --- 비밀번호 2개 비교 메소드 --- */
+    private void validatePasswords(String password, String passwordConfirm, MemberErrorResult memberErrorResult){
+        if(isPasswordNotMatch(password, passwordConfirm)){
+            throw new MemberException(memberErrorResult);
+        }
     }
 
     /**
@@ -146,16 +153,19 @@ public class MemberService {
      * 비밀번호 찾기(재설정) 메소드
      * @param loginId
      * @param email
+     * 1. 유효성 검사 이후
+     * 2. 임시 비밀번호로 변경 이후
+     * 3. 이메일 전송(임시 비밀번호)
      * 찾기 실패 시
      * @throw MemberException(MEMBER_NOT_FOUND_BY_FIND_PASSWORD)
      */
     @Transactional
-    public void findPasswordAndChangeTempPassword(String loginId, String email) {
+    public void findPassword(String loginId, String email) {
         Member findMember = memberRepository.findByLoginIdAndEmail(loginId, email)
                 .orElseThrow(() -> new MemberException(MemberErrorResult.MEMBER_NOT_FOUND_BY_FIND_PASSWORD));
 
         String tempPassword = createTempPassword();
-        emailSendService.passwordFindEmailSend(email, tempPassword);
+        mailUtil.passwordFindEmailSend(email, tempPassword);
 
         String encodedTempPassword = passwordEncoder.encode(tempPassword);
         findMember.updatePassword(encodedTempPassword);
@@ -166,4 +176,69 @@ public class MemberService {
         return uuid.toString().substring(0, 8);
     }
 
+    /**
+     * 비밀번호 확인 메소드
+     * @param memberId
+     * @param confirmRequestPassword
+     * 비밀번호가 일치하지 않을 시
+     * @throw MemberException(PASSWORD_CONFIRM_REQUEST_FAIL)
+     * 멤버 인덱스(id)가 일치하지 않을 시 - 세션 끊김 등의 사유로...
+     * @throw MemberException(MEMBER_NOT_FOUND_BY_FIND_MEMBER_ID)
+     */
+    public ChangeMemberInfoResponse confirmPasswordAndReturnMemberInfo(Long memberId, String confirmRequestPassword) {
+        Member findMember = confirmPassword(memberId, confirmRequestPassword);
+
+        return ChangeMemberInfoResponse.createResponse(findMember);
+    }
+
+    /* --- 비밀번호 확인 메소드 --- */
+    private Member confirmPassword(Long memberId, String confirmRequestPassword) {
+        Member findMember = findMemberByMemberId(memberId);
+
+        boolean result = passwordEncoder.matches(confirmRequestPassword, findMember.getPassword());
+
+        if(result == false){
+            throw new MemberException(MemberErrorResult.PASSWORD_CONFIRM_REQUEST_FAIL);
+        }
+        return findMember;
+    }
+
+    /* --- id로 멤버 찾는 메소드 --- */
+    private Member findMemberByMemberId(Long memberId) {
+        if(memberId == null){
+            throw new MemberException(MemberErrorResult.MEMBER_NOT_FOUND_BY_FIND_MEMBER_ID);
+        }
+
+        Member findMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(MemberErrorResult.MEMBER_NOT_FOUND_BY_FIND_MEMBER_ID));
+        return findMember;
+    }
+
+    /**
+     * 비밀번호 변경 메소드
+     * @param memberId
+     * @param request
+     * memberId가 null or 찾을 수 없을 때
+     * @thow MemberException(MEMBER_NOT_FOUND_BY_FIND_MEMBER_ID)
+     */
+    @Transactional
+    public void updatePassword(Long memberId, ChangePasswordRequest request) {
+        Member findMember = confirmPassword(memberId, request.getPassword());
+
+        String password = request.getPasswordNew();
+        String passwordConfirm = request.getPasswordConfirm();
+        validatePasswords(password, passwordConfirm, MemberErrorResult.PASSWORD_NOT_MATCH);
+
+        String encodedPassword = encodePassword(password);
+        findMember.updatePassword(encodedPassword);
+    }
+
+    /**
+     * 닉네임 변경 메소드
+     * @param memberId
+     * @param nickname
+     */
+    public void updateNickname(Long memberId, String nickname) {
+        Member findMember = findMemberByMemberId(memberId);
+    }
 }

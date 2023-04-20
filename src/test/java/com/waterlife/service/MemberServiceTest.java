@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,6 +23,9 @@ class MemberServiceTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Test
     void register_fail_duplicated_loginId() {
@@ -159,5 +163,69 @@ class MemberServiceTest {
                 .isInstanceOf(MemberException.class)
                 .hasMessageContaining(MemberErrorResult.MEMBER_NOT_FOUND_BY_FIND_LOGIN_ID.getMessage());
 
+    }
+
+    @Test
+    void update_password_fail_password_not_match() {
+        //given
+        MemberRegisterForm form = new MemberRegisterForm();
+        form.setLoginId("test");
+        form.setPassword("1234");
+        form.setPasswordConfirm("1234");
+        Long memberId = memberService.register(form);
+
+        //when
+        String password = "hello";
+        String passwordNew = "test1234";
+        String passwordNewConfirm = "test1234";
+        ChangePasswordRequest request = new ChangePasswordRequest(password, passwordNew, passwordNewConfirm);
+        assertThatThrownBy(() ->
+            memberService.updatePassword(memberId, request))
+                .isInstanceOf(MemberException.class)
+                .hasMessageContaining(MemberErrorResult.PASSWORD_CONFIRM_REQUEST_FAIL.getMessage());
+
+    }
+
+    @Test
+    void update_password_fail_validate() {
+        //given
+        MemberRegisterForm form = new MemberRegisterForm();
+        form.setLoginId("test");
+        form.setPassword("1234");
+        form.setPasswordConfirm("1234");
+        Long memberId = memberService.register(form);
+
+        //when
+        String password = "1234";
+        String passwordNew = "hello";
+        String passwordNewConfirm = "test1234";
+        ChangePasswordRequest request = new ChangePasswordRequest(password, passwordNew, passwordNewConfirm);
+        assertThatThrownBy(() ->
+                memberService.updatePassword(memberId, request))
+                .isInstanceOf(MemberException.class)
+                .hasMessageContaining(MemberErrorResult.PASSWORD_NOT_MATCH.getMessage());
+
+    }
+
+    @Test
+    void update_password_success() {
+        //given
+        MemberRegisterForm form = new MemberRegisterForm();
+        form.setLoginId("test");
+        form.setPassword("1234");
+        form.setPasswordConfirm("1234");
+        Long memberId = memberService.register(form);
+
+        //when
+        String password = "1234";
+        String passwordNew = "hello";
+        String passwordNewConfirm = "hello";
+        ChangePasswordRequest request = new ChangePasswordRequest(password, passwordNew, passwordNewConfirm);
+        memberService.updatePassword(memberId, request);
+
+        //then
+        Member findMember = memberRepository.findById(memberId).get();
+        boolean result = passwordEncoder.matches("hello", findMember.getPassword());
+        assertThat(result).isTrue();
     }
 }

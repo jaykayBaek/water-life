@@ -2,6 +2,7 @@ package com.waterlife.controller.member;
 
 import com.waterlife.controller.FindLoginIdResultResponse;
 import com.waterlife.controller.ResultResponse;
+import com.waterlife.service.MailUtil;
 import com.waterlife.service.MemberRegisterForm;
 import com.waterlife.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 public class MemberRestController {
 
     private final MemberService memberService;
+    private final MailUtil mailUtil;
 
     @PostMapping("/register")
     public ResponseEntity<ResultResponse> register(
@@ -81,7 +83,7 @@ public class MemberRestController {
 
     @PostMapping("/finds/password")
     public ResponseEntity<ResultResponse> findPassword(String loginId, String email){
-        memberService.findPasswordAndChangeTempPassword(loginId, email);
+        memberService.findPassword(loginId, email);
 
         ResultResponse resultResponse = new ResultResponse(
                 HttpStatus.OK.toString(), MemberRequestResult.FIND_PASSWORD_SUCCESS.getMessage(), true

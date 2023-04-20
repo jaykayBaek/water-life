@@ -53,9 +53,9 @@
         <div class="member__info-bottom">
           <button class="write">글쓰기</button>
           <div class="info__box d-flex justify-content-around">
-            <span>내 정보</span>
-            <span>내가 쓴 글</span>
-            <span>내가 쓴 댓글</span>
+            <a th:href="@{/my-info}">내 정보</a>
+            <a th:href="@{/my-info/posts}">내가 쓴 글</a>
+            <a th:href="@{/my-info/comments}">내가 쓴 댓글</a>
           </div>
         </div>
       </div>
