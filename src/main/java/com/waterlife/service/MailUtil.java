@@ -3,21 +3,20 @@ package com.waterlife.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-@Service
+@Component
 @RequiredArgsConstructor
-public class EmailSendService {
+public class MailUtil {
     private final JavaMailSender javaMailSender;
 
     public void passwordFindEmailSend(String toEmail, String tempPassword){
         MimeMessage message = createMessage(toEmail, tempPassword);
         javaMailSender.send(message);
     }
-
     private MimeMessage createMessage(String toEmail, String tempPassword){
         MimeMessage message = javaMailSender.createMimeMessage();
 
