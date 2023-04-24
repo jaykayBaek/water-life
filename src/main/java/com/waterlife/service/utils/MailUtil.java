@@ -1,4 +1,4 @@
-package com.waterlife.service;
+package com.waterlife.service.utils;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;

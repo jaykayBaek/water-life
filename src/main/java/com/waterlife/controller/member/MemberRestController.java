@@ -2,9 +2,8 @@ package com.waterlife.controller.member;
 
 import com.waterlife.controller.FindLoginIdResultResponse;
 import com.waterlife.controller.ResultResponse;
-import com.waterlife.service.MailUtil;
-import com.waterlife.service.MemberRegisterForm;
-import com.waterlife.service.MemberService;
+import com.waterlife.service.member.MemberRegisterForm;
+import com.waterlife.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 public class MemberRestController {
 
     private final MemberService memberService;
-    private final MailUtil mailUtil;
 
     @PostMapping("/register")
     public ResponseEntity<ResultResponse> register(
@@ -50,8 +48,6 @@ public class MemberRestController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(resultResponse);
-
-
     }
 
     @PostMapping("/register/check/email")

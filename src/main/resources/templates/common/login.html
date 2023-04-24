@@ -51,12 +51,13 @@
 
         </div>
         <div class="member__info-bottom">
-          <button class="write">글쓰기</button>
+          <a th:href="@{/posts/new}" class="write">글쓰기</a>
           <div class="info__box d-flex justify-content-around">
             <a th:href="@{/my-info}">내 정보</a>
             <a th:href="@{/my-info/posts}">내가 쓴 글</a>
             <a th:href="@{/my-info/comments}">내가 쓴 댓글</a>
           </div>
+
         </div>
       </div>
     </th:block>

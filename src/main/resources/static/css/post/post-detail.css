@@ -1,0 +1,69 @@
+#title-block{
+    background-color: var(--grey);
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 8px 16px;
+}
+
+.content-block h2{
+    font-size: 18px;
+    font-weight: 700;
+    padding: 0px;
+    margin: 0px;
+}
+
+.title__bottom-right span{
+    margin-left: 16px;
+}
+
+.title__bottom-right span b{
+    font-weight: normal;
+}
+
+.content-block{
+    margin-bottom: 16px;
+}
+
+.btn__likes__box__wrap{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn__likes__box{
+    border: 1px solid #ccc;
+    width: 512px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn__likes__box .likes__inner{
+    font-size: 14px;
+    margin: 32px 14px 32px 0;
+}
+
+.btn__likes__box .likes__inner b{
+    padding: 16px;
+    color: #555;
+    font-size: 18px;
+}
+
+.btn__likes__box .likes__inner b.likes{
+    color: var(--mainred)
+}
+
+.btn__likes__box .likes__inner button{
+    border: 0;
+    color: #fff;
+    padding: 32px 64px;
+}
+
+.btn__likes__box .likes__inner button.likes{
+    background-color: var(--maincolor);
+}
+
+.btn__likes__box .likes__inner button.dislikes{
+    background-color: #555;
+}

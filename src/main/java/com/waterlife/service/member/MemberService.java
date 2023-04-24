@@ -1,10 +1,11 @@
-package com.waterlife.service;
+package com.waterlife.service.member;
 
 import com.waterlife.controller.MemberInformationResponse;
 import com.waterlife.entity.Member;
 import com.waterlife.exception.member.MemberErrorResult;
 import com.waterlife.exception.member.MemberException;
 import com.waterlife.repository.MemberRepository;
+import com.waterlife.service.utils.MailUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -203,8 +204,14 @@ public class MemberService {
         return findMember;
     }
 
-    /* --- id로 멤버 찾는 메소드 --- */
-    private Member findMemberByMemberId(Long memberId) {
+    /**
+     * id로 멤버 검색 메소드
+     * @param memberId
+     * @return Member
+     * 찾지 못할 경우
+     * @Throw MemberException(MEMBER_NOT_FOUND_BY_FIND_MEMBER_ID)
+     */
+    public Member findMemberByMemberId(Long memberId) {
         if(memberId == null){
             throw new MemberException(MemberErrorResult.MEMBER_NOT_FOUND_BY_FIND_MEMBER_ID);
         }

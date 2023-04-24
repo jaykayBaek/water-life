@@ -1,4 +1,4 @@
-package com.waterlife.service;
+package com.waterlife.service.member;
 
 import com.waterlife.entity.enums.Gender;
 import lombok.Getter;

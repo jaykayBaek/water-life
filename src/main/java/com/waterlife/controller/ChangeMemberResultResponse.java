@@ -1,6 +1,6 @@
 package com.waterlife.controller;
 
-import com.waterlife.service.ChangeMemberInfoResponse;
+import com.waterlife.service.member.ChangeMemberInfoResponse;
 import lombok.Getter;
 
 @Getter

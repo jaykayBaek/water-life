@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>슬기로운 물생활</title>
+
+  <th:block th:replace="~{common/common-setting :: common-setting}"></th:block>
+
+  <link rel="stylesheet" th:href="@{/css/post/post.css}" type="text/css">
+  <link rel="stylesheet" th:href="@{/css/post/post-detail.css}" type="text/css">
+</head>
+<body>
+<div class="main">
+
+  <th:block th:replace="~{common/header :: header}"></th:block>
+
+  <article class="container mt-3">
+      <div class="row">
+        <div class="col-10">
+          <div class="content__wrap">
+            <div class="content-block">
+              카테고리 | <span th:text="${board.categoryName}"></span>
+            </div>
+            <div class="content-block" id="title-block">
+              <div class="title__top d-flex justify-content-between">
+                <h2 class="title" th:text="${board.title}"></h2>
+                <span class="title__bottom-left" th:text="${board.createdTime}"></span>
+              </div>
+              <div class="title__bottom d-flex justify-content-between">
+                <div class="title__bottom-left">
+                  <span th:text="${board.nickname}"></span>
+                </div>
+                <div class="title__bottom-right">
+                  <span>조회수 <b th:text="${board.views}"></b></span>
+                  <span>좋아요 <b th:text="${board.likes}"></b></span>
+                </div>
+              </div>
+            </div>
+            <div class="content-block">
+              <th:block th:utext="${board.content}"></th:block>
+            </div>
+          </div>
+          <div class="btn__likes__box__wrap">
+            <div class="btn__likes__box">
+              <div class="likes__inner">
+                <b class="likes" th:text="${board.likes}"></b>
+                <button class="likes" type="button">
+                  좋아요
+                  <i class="fa-solid fa-thumbs-up"></i>
+                </button>
+              </div>
+              <div class="likes__inner">
+                <button class="dislikes" type="button">
+                  싫어요
+                  <i class="fa-solid fa-thumbs-down"></i>
+                </button>
+                <b class="dislikes" th:text="${board.dislikes}"></b>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-2">
+          <th:block th:replace="common/login :: login"></th:block>
+        </div>
+      </div>
+  </article>
+
+  <th:block th:replace="~{common/footer :: footer}"></th:block>
+</div>
+</body>
+</html>

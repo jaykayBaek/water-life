@@ -2,7 +2,7 @@ package com.waterlife.entity;
 
 import com.waterlife.entity.enums.Gender;
 import com.waterlife.entity.enums.Ranking;
-import com.waterlife.service.MemberRegisterForm;
+import com.waterlife.service.member.MemberRegisterForm;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

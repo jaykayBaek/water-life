@@ -1,6 +1,6 @@
 package com.waterlife.controller.member;
 
-import com.waterlife.service.MemberService;
+import com.waterlife.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

@@ -1,4 +1,4 @@
-package com.waterlife.service;
+package com.waterlife.service.member;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
