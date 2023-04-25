@@ -2,230 +2,230 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>슬기로운 물생활</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>슬기로운 물생활</title>
 
-  <th:block th:replace="~{common/common-setting :: common-setting}"></th:block>
-  <link rel="stylesheet" th:href="@{/css/member/finds-form.css}" type="text/css">
+    <th:block th:replace="~{common/common-setting :: common-setting}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/member/finds-form.css}" type="text/css">
 </head>
 
 <script>
-  const passwordChange = () => {
-    const password = $('#password').val();
-    const passwordNew = $('#passwordNew').val();
-    const passwordConfirm = $('#passwordConfirm').val();
+    const passwordChange = () => {
+        const password = $('#password').val();
+        const passwordNew = $('#passwordNew').val();
+        const passwordConfirm = $('#passwordConfirm').val();
 
-    if(password.trim() == '' || passwordNew.trim() == '' || passwordConfirm == ''){
-      alert('현재 비밀번호 또는 새 비밀번호를 입력해주세요.');
-      return false;
+        if(password.trim() == '' || passwordNew.trim() == '' || passwordConfirm == ''){
+            alert('현재 비밀번호 또는 새 비밀번호를 입력해주세요.');
+            return false;
+        }
+
+        if(passwordNew != passwordConfirm){
+            alert('새 비밀번호가 일치하지 않습니다.')
+            return false;
+        }
+
+        const regPassword = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,16}$/i;
+
+        if(!passwordNew.match(regPassword) || !passwordConfirm.match(regPassword)){
+            alert('비밀번호 양식을 다시 확인해주세요. 8~16자로 구성하세요. 숫자, 특수문자가 한 개 이상 포함된 대 소문자를 사용하세요.')
+            return false;
+        }
+
+        $.ajax({
+            method: "patch",
+            url: "http://localhost:8080/my-info/password",
+            data: {
+                password : password,
+                passwordNew: passwordNew,
+                passwordConfirm: passwordConfirm
+            },
+            async: false,
+            success: function (result){
+                console.log(result);
+                alert(result.message);
+                $('#password').val('');
+                $('#passwordNew').val('');
+                $('#passwordConfirm').val('');
+            },
+            error: function (result){
+                const response = result.responseJSON;
+                console.log(response);
+                alert(response.message);
+            }
+        });
     }
 
-    if(passwordNew != passwordConfirm){
-      alert('새 비밀번호가 일치하지 않습니다.')
-      return false;
+    const nicknameChange = () => {
+        const nickname = $('#nickname').val();
+        const regNickname = /^[a-zA-Z0-9가-힣]{2,20}$/;
+
+        if(nickname.trim() == ''){
+            alert('닉네임을 입력해주세요.');
+            return false;
+        }
+
+        if(!nickname.match(regNickname)){
+            alert('2~20자로 구성하세요. 영문 대 소문자와 초성이 아닌 한글 단어만 가능합니다.');
+            return false;
+        }
+
+        $.ajax({
+            method: "patch",
+            url: "http://localhost:8080/my-info/nickname",
+            data: {
+                nickname : nickname
+            },
+            async: false,
+            success: function (result){
+                console.log(result);
+                alert(result.message);
+            },
+            error: function (result){
+                const response = result.responseJSON;
+                console.log(response);
+                alert(response.message);
+            }
+        });
     }
 
-    const regPassword = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,16}$/i;
+    const emailChange = () => {
+        const email = $('#email').val();
+        const regEmail = /^[\w-\.]{1,25}@([\w-]+\.)+[\w-]{2,4}$/i;
 
-    if(!passwordNew.match(regPassword) || !passwordConfirm.match(regPassword)){
-      alert('비밀번호 양식을 다시 확인해주세요. 8~16자로 구성하세요. 숫자, 특수문자가 한 개 이상 포함된 대 소문자를 사용하세요.')
-      return false;
+        if(email.trim() == ''){
+            alert('이메일을 입력해주세요.');
+            return false;
+        }
+
+        if(!email.match(regEmail)){
+            alert('이메일 주소를 올바르게 입력하세요.');
+            return false;
+        }
+
+        $.ajax({
+            method: "patch",
+            url: "http://localhost:8080/my-info/email",
+            data: {
+                email : email
+            },
+            async: false,
+            success: function (result){
+                console.log(result);
+                alert(result.message);
+            },
+            error: function (result){
+                const response = result.responseJSON;
+                console.log(response);
+                alert(response.message);
+            }
+        });
     }
-
-    $.ajax({
-      method: "patch",
-      url: "http://localhost:8080/my-info/password",
-      data: {
-        password : password,
-        passwordNew: passwordNew,
-        passwordConfirm: passwordConfirm
-      },
-      async: false,
-      success: function (result){
-        console.log(result);
-        alert(result.message);
-        $('#password').val('');
-        $('#passwordNew').val('');
-        $('#passwordConfirm').val('');
-      },
-      error: function (result){
-        const response = result.responseJSON;
-        console.log(response);
-        alert(response.message);
-      }
-    });
-  }
-
-  const nicknameChange = () => {
-    const nickname = $('#nickname').val();
-    const regNickname = /^[a-zA-Z0-9가-힣]{2,20}$/;
-
-    if(nickname.trim() == ''){
-      alert('닉네임을 입력해주세요.');
-      return false;
-    }
-
-    if(!nickname.match(regNickname)){
-      alert('2~20자로 구성하세요. 영문 대 소문자와 초성이 아닌 한글 단어만 가능합니다.');
-      return false;
-    }
-
-    $.ajax({
-      method: "patch",
-      url: "http://localhost:8080/my-info/nickname",
-      data: {
-        nickname : nickname
-      },
-      async: false,
-      success: function (result){
-        console.log(result);
-        alert(result.message);
-      },
-      error: function (result){
-        const response = result.responseJSON;
-        console.log(response);
-        alert(response.message);
-      }
-    });
-  }
-
-  const emailChange = () => {
-    const email = $('#email').val();
-    const regEmail = /^[\w-\.]{1,25}@([\w-]+\.)+[\w-]{2,4}$/i;
-
-    if(email.trim() == ''){
-      alert('이메일을 입력해주세요.');
-      return false;
-    }
-
-    if(!email.match(regEmail)){
-      alert('이메일 주소를 올바르게 입력하세요.');
-      return false;
-    }
-
-    $.ajax({
-      method: "patch",
-      url: "http://localhost:8080/my-info/email",
-      data: {
-        email : email
-      },
-      async: false,
-      success: function (result){
-        console.log(result);
-        alert(result.message);
-      },
-      error: function (result){
-        const response = result.responseJSON;
-        console.log(response);
-        alert(response.message);
-      }
-    });
-  }
 </script>
 
 <body>
 <div class="main">
-  <th:block th:replace="~{common/header :: header}"></th:block>
+    <th:block th:replace="~{common/header :: header}"></th:block>
 
-  <article class="container mt-3">
-    <section class="finds__form">
-      <div class="title__wrap text-center">
-        <h2 class="title">기본 정보 변경</h2>
-        <span class="sub-title">보안을 위해 비밀번호를 한번 더 입력해 주세요.</span>
-      </div>
+    <article class="container mt-3">
+        <section class="finds__form">
+            <div class="title__wrap text-center">
+                <h2 class="title">기본 정보 변경</h2>
+                <span class="sub-title">보안을 위해 비밀번호를 한번 더 입력해 주세요.</span>
+            </div>
 
-      <div class="content__wrap text-center">
-        <div class="finds__input-block">
-          <input type="password" id="password" name="password" placeholder="비밀번호 확인">
-        </div>
-        <button class="password__confirm" id="password__confirm" type="button">확인</button>
-      </div>
+            <div class="content__wrap text-center">
+                <div class="finds__input-block">
+                    <input type="password" id="password" name="password" placeholder="비밀번호 확인">
+                </div>
+                <button class="password__confirm" id="password__confirm" type="button">확인</button>
+            </div>
 
-    </section>
-    <script>
-      $(function () {
-        $('#password__confirm').on("click", function (){
-          const password = $('#password').val();
+        </section>
+        <script>
+            $(function () {
+                $('#password__confirm').on("click", function (){
+                    const password = $('#password').val();
 
-          if(password.trim() == ''){
-            alert('비밀번호를 입력해주세요.');
-            return false;
-          }
+                    if(password.trim() == ''){
+                        alert('비밀번호를 입력해주세요.');
+                        return false;
+                    }
 
-          $.ajax({
-            method: "post",
-            url: "http://localhost:8080/my-info/confirm/password",
-            data: {
-              password : password
-            },
-            success: function (result){
-              console.log(result);
-              $(".sub-title").html('');
-              $(".content__wrap").html(
-                      '<table class="my__info">' +
-                      ' <tbody>' +
-                      '   <tr>' +
-                      '     <th>이름</th>' +
-                      '     <td>'+result.response.memberName+'</td>' +
-                      '   </tr>' +
-                      '   <tr>' +
-                      '     <th>아이디</th>' +
-                      '     <td>'+result.response.loginId+'</td>' +
-                      '   </tr>' +
-                      '   <tr>' +
-                      '     <th>비밀번호 변경</th>' +
-                      '     <td>' +
-                      '       <input type="password" id="password" placeholder="현재 비밀번호">' +
-                      '       <input type="password" id="passwordNew" placeholder="새 비밀번호">' +
-                      '       <input type="password" id="passwordConfirm" placeholder="새 비밀번호 확인">' +
-                      '       <button class="change" type="button" id="password-change" onclick="passwordChange()">비밀번호 변경</button>' +
-                      '       <div style="font-size: 11px">8~16자로 구성하세요. 숫자, 특수문자가 한 개 이상 포함된 대 소문자를 사용하세요.</div>' +
-                      '     </td>' +
-                      '   </tr>' +
-                      '   <tr>' +
-                      '     <th>닉네임</th>' +
-                      '     <td>' +
-                      '       <input type="text" id="nickname" value="'+result.response.nickname+'"/>' +
-                      '       <button class="change" type="button" id="nickname-change" onclick="nicknameChange()">닉네임 변경</button>' +
-                      '     </td>' +
-                      '   </tr>' +
-                      '   <tr>' +
-                      '     <th>이메일 주소</th>' +
-                      '     <td>' +
-                      '       <input type="email" id="email" value="'+result.response.email+'">' +
-                      '       <button class="change" type="button" id="email-change" onclick="emailChange()">이메일 주소 변경</button>' +
-                      '     </td>' +
-                      '   </tr>' +
-                      '   <tr>' +
-                      '     <th>등급</th>' +
-                      '     <td>'+result.response.ranking+'</td>' +
-                      '   </tr>' +
-                      '   <tr>' +
-                      '     <th>등급 포인트</th>' +
-                      '     <td>'+result.response.levelPoint+'</td>' +
-                      '   </tr>' +
-                      '   <tr>' +
-                      '     <th>핸드폰 번호</th>' +
-                      '     <td>' + result.response.phoneNo + '</td>' +
-                      '   </tr>' +
-                      ' </tbody>' +
-                      '</table>'
-              );
-            },
-            error: function (result){
-              const response = result.responseJSON;
-              console.log(response);
-              alert(response.message);
-            }
-          })
-        })
-      })
-    </script>
-  </article>
+                    $.ajax({
+                        method: "post",
+                        url: "http://localhost:8080/my-info/confirm/password",
+                        data: {
+                            password : password
+                        },
+                        success: function (result){
+                            console.log(result);
+                            $(".sub-title").html('');
+                            $(".content__wrap").html(
+                                '<table class="my__info">' +
+                                ' <tbody>' +
+                                '   <tr>' +
+                                '     <th>이름</th>' +
+                                '     <td>'+result.response.memberName+'</td>' +
+                                '   </tr>' +
+                                '   <tr>' +
+                                '     <th>아이디</th>' +
+                                '     <td>'+result.response.loginId+'</td>' +
+                                '   </tr>' +
+                                '   <tr>' +
+                                '     <th>비밀번호 변경</th>' +
+                                '     <td>' +
+                                '       <input type="password" id="password" placeholder="현재 비밀번호">' +
+                                '       <input type="password" id="passwordNew" placeholder="새 비밀번호">' +
+                                '       <input type="password" id="passwordConfirm" placeholder="새 비밀번호 확인">' +
+                                '       <button class="change" type="button" id="password-change" onclick="passwordChange()">비밀번호 변경</button>' +
+                                '       <div style="font-size: 11px">8~16자로 구성하세요. 숫자, 특수문자가 한 개 이상 포함된 대 소문자를 사용하세요.</div>' +
+                                '     </td>' +
+                                '   </tr>' +
+                                '   <tr>' +
+                                '     <th>닉네임</th>' +
+                                '     <td>' +
+                                '       <input type="text" id="nickname" value="'+result.response.nickname+'"/>' +
+                                '       <button class="change" type="button" id="nickname-change" onclick="nicknameChange()">닉네임 변경</button>' +
+                                '     </td>' +
+                                '   </tr>' +
+                                '   <tr>' +
+                                '     <th>이메일 주소</th>' +
+                                '     <td>' +
+                                '       <input type="email" id="email" value="'+result.response.email+'">' +
+                                '       <button class="change" type="button" id="email-change" onclick="emailChange()">이메일 주소 변경</button>' +
+                                '     </td>' +
+                                '   </tr>' +
+                                '   <tr>' +
+                                '     <th>등급</th>' +
+                                '     <td>'+result.response.ranking+'</td>' +
+                                '   </tr>' +
+                                '   <tr>' +
+                                '     <th>등급 포인트</th>' +
+                                '     <td>'+result.response.levelPoint+'</td>' +
+                                '   </tr>' +
+                                '   <tr>' +
+                                '     <th>핸드폰 번호</th>' +
+                                '     <td>' + result.response.phoneNo + '</td>' +
+                                '   </tr>' +
+                                ' </tbody>' +
+                                '</table>'
+                            );
+                        },
+                        error: function (result){
+                            const response = result.responseJSON;
+                            console.log(response);
+                            alert(response.message);
+                        }
+                    })
+                })
+            })
+        </script>
+    </article>
 
-  <th:block th:replace="~{common/footer :: footer}"></th:block>
+    <th:block th:replace="~{common/footer :: footer}"></th:block>
 </div>
 </body>
 

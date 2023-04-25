@@ -1,0 +1,13 @@
+package com.waterlife.controller.post;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+@Getter
+public enum CommentRequestResult {
+    WRITE_SUCCESS("댓글 작성이 완료되었습니다."),
+
+    ;
+    private final String message;
+}

@@ -16,9 +16,9 @@ public class BoardInformationResponse {
     private Boolean commentable;
     private Boolean recommendable;
     private int likes;
-    private int dislikes;
     private int views;
     private String createdTime;
+    private int commentTotalCount;
 
     public static BoardInformationResponse createResponse(Board board){
         BoardInformationResponse response = new BoardInformationResponse();
@@ -31,9 +31,9 @@ public class BoardInformationResponse {
         response.categoryName = board.getCategory().getDescription();
         response.commentable = board.getCommentable();
         response.recommendable = board.getRecommendable();
-        response.likes = board.getLikes();
-        response.dislikes = board.getDislikes();
         response.views = board.getViews();
+        response.likes = board.getLikes();
+        response.commentTotalCount = board.getCommentTotalCount();
         response.createdTime = board.getCreatedTime().toString().substring(0, 10);
         return response;
     }

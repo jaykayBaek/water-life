@@ -1,6 +1,5 @@
 package com.waterlife.service.board;
 
-import com.waterlife.controller.post.WritePostRequest;
 import com.waterlife.entity.Board;
 import com.waterlife.entity.Member;
 import com.waterlife.exception.board.BoardErrorResult;
@@ -9,6 +8,8 @@ import com.waterlife.repository.BoardRepository;
 import com.waterlife.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,13 +36,43 @@ public class BoardService {
     /**
      * 게시글 열람 메소드
      * @param boardId
-     * @return
+     */
+    public BoardInformationResponse findBoardById(Long boardId) {
+        Board board = findBoardByBoardId(boardId);
+        return BoardInformationResponse.createResponse(board);
+    }
+
+    /**
+     * 게시글 조회수 증가 메소드
+     * @param boardId
+     *
+     */
+    @Transactional
+    public void addBoardViews(Long boardId) {
+        Board board = findBoardByBoardId(boardId);
+
+        int views = board.getViews();
+        int updatedViews = ++views;
+
+        board.updateViews(updatedViews);
+    }
+
+    /**
+     * BoardId로 Board를 찾는 메소드
+     * @param boardId
      * 게시글을 찾을 수 없을 시
      * @Throw BoardException(BOARD_NOT_FOUND_BY_FIND_BOARD_ID)
      */
-    public BoardInformationResponse findBoardById(Long boardId) {
-        Board board = boardRepository.findById(boardId)
+    public Board findBoardByBoardId(Long boardId){
+        if(boardId == null){
+            throw new BoardException(BoardErrorResult.BOARD_NOT_FOUND_BY_FIND_BOARD_ID);
+        }
+        return boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardException(BoardErrorResult.BOARD_NOT_FOUND_BY_FIND_BOARD_ID));
-        return BoardInformationResponse.createResponse(board);
+    }
+
+    public Page<MyWrotePostsDto> findMyWrotePosts(Long memberId, Pageable pageable) {
+        Page<Board> findBoards = boardRepository.findMyWrotePosts(memberId, pageable);
+        return findBoards.map(board -> new MyWrotePostsDto(board));
     }
 }

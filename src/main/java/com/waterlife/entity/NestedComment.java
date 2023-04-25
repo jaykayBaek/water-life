@@ -12,9 +12,9 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-public class Comment extends BaseEntity {
+public class NestedComment extends BaseEntity {
     @Id @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "comment_id")
+    @Column(name = "nested_comment_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
@@ -25,13 +25,9 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "board_id")
     private Board board;
 
-    private String content;
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "comment_id")
+    private Comment comment;
 
-    public static Comment createComment(Member findMember, Board findBoard, String content) {
-        Comment comment = new Comment();
-        comment.member = findMember;
-        comment.board = findBoard;
-        comment.content = content;
-        return comment;
-    }
+    private String content;
 }

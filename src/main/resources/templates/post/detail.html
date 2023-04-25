@@ -19,10 +19,14 @@
 
   <article class="container mt-3">
       <div class="row">
-        <div class="col-10">
+        <div class="col-9">
           <div class="content__wrap">
             <div class="content-block">
               카테고리 | <span th:text="${board.categoryName}"></span>
+            </div>
+            <div class="content-block" th:if="${memberId eq board.memberId}">
+              <button class="btn btn-sm btn-outline-dark">수정</button>
+              <button class="btn btn-sm btn-outline-dark">삭제</button>
             </div>
             <div class="content-block" id="title-block">
               <div class="title__top d-flex justify-content-between">
@@ -46,23 +50,104 @@
           <div class="btn__likes__box__wrap">
             <div class="btn__likes__box">
               <div class="likes__inner">
-                <b class="likes" th:text="${board.likes}"></b>
                 <button class="likes" type="button">
                   좋아요
                   <i class="fa-solid fa-thumbs-up"></i>
                 </button>
               </div>
+              <b class="likes" th:text="${board.likes}"></b>
               <div class="likes__inner">
                 <button class="dislikes" type="button">
                   싫어요
                   <i class="fa-solid fa-thumbs-down"></i>
                 </button>
-                <b class="dislikes" th:text="${board.dislikes}"></b>
               </div>
             </div>
           </div>
+          <div class="comment__box__wrap">
+            <div class="content-block total-comment__wrap">
+              전체 댓글 <b class="red" th:text="${board.commentTotalCount}"></b>개
+            </div>
+            <div class="content-block comment-block">
+              <!--  댓글  -->
+              <ul th:each="comment : ${comments}">
+                <li class="comment-box">
+                  <div class="comment-line__wrap">
+                    <div class="nickname-box" th:text="${comment.nickname}"></div>
+                    <div class="content-box" th:text="${comment.content}"></div>
+                    <div class="info-box">
+                      <span th:text="${#strings.substring(comment.createdTime, 0, 10)}"></span>
+                      <th:block th:if="${memberId ne null}">
+                        <button type="button" class="nested-comment" data-bs-toggle="modal" data-bs-target="#nestedComment">답글 쓰기</button>
+                        <div class="modal fade" id="nestedComment" tabindex="-1" aria-labelledby="nestedComment" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-body">
+                                <div class="content-box">
+                                  <h5 class="modal-title">답글 달기</h5>
+                                </div>
+                                <div class="content-box">
+                                  <textarea class="form-control"></textarea>
+                                </div>
+                                <div class="content-box">
+                                  <button type="button" class="btn btn-sm red" data-bs-dismiss="modal">창 닫기</button>
+                                  <button type="button" class="btn btn-sm main">답글 달기</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </th:block>
+                      <th:block th:if="${memberId eq comment.memberId}">
+                        <a href="">수정하기</a>
+                        <a href="">삭제하기</a>
+                      </th:block>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <th:block th:if="${board.commentable eq true}">
+              <div class="content-block comment__write-block">
+                <div class="form-floating">
+                  <textarea class="form-control" id="comments" placeholder="댓글 작성"></textarea>
+                  <label for="comments">댓글 작성</label>
+                  <div class="button__wrap d-flex justify-content-end">
+                    <button type="button" class="btn btn-outline-dark" onclick="writeComment()">
+                      작성하기
+                    </button>
+                    <script th:inline="javascript">
+                      const writeComment = () => {
+                        const content = $('#comments').val();
+                        const boardId = [[${board.boardId}]];
+                        $.ajax({
+                          type: "post",
+                          url: "http://localhost:8080/comments",
+                          data: {
+                            content: content,
+                            boardId: boardId
+                          },
+                          success: function (result){
+                            console.log(result);
+                            location.reload();
+                          },
+                          error: function (result){
+                            const response = result.responseJSON;
+                            console.log(response);
+                            if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
+                              alert('로그인을 하셔야 댓글을 작성할 수 있습니다');
+                            }
+                          }
+                        })
+                      }
+                    </script>
+                  </div>
+                </div>
+              </div>
+            </th:block>
+          </div>
         </div>
-        <div class="col-2">
+        <div class="col-3">
           <th:block th:replace="common/login :: login"></th:block>
         </div>
       </div>

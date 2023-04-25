@@ -1,0 +1,28 @@
+article.container{
+    height: 100vh;
+}
+
+a{
+    text-decoration: none;
+    color: #555;
+}
+
+td a:hover{
+    text-decoration: underline;
+}
+
+ul{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+ul li{
+    margin-right: 16px;
+}
+
+a.bold{
+    font-weight: 700;
+    color: var(--maincolor);
+    border-bottom: 3px solid var(--maincolor);
+}

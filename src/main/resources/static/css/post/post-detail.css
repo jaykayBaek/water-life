@@ -5,6 +5,12 @@
     padding: 8px 16px;
 }
 
+ul{
+    list-style: none;
+    padding: 0px;
+    margin: 0px;
+}
+
 .content-block h2{
     font-size: 18px;
     font-weight: 700;
@@ -35,22 +41,17 @@
     border: 1px solid #ccc;
     width: 512px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+    margin: 64px 0 128px 0;
 }
 
 .btn__likes__box .likes__inner{
     font-size: 14px;
-    margin: 32px 14px 32px 0;
+    margin: 32px 14px 32px 14px;
 }
 
-.btn__likes__box .likes__inner b{
-    padding: 16px;
-    color: #555;
-    font-size: 18px;
-}
-
-.btn__likes__box .likes__inner b.likes{
+.btn__likes__box b.likes{
     color: var(--mainred)
 }
 
@@ -66,4 +67,84 @@
 
 .btn__likes__box .likes__inner button.dislikes{
     background-color: #555;
+}
+
+.content__wrap {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.content-block img{
+    width: 100%;
+    max-width: 800px;
+}
+
+.comment__box__wrap{
+    width: 100%;
+}
+
+.comment__box__wrap .content-block b.red{
+    color: var(--mainred);
+}
+
+.comment__box__wrap .comment-block{
+    width: 100%;
+
+}
+
+.comment__box__wrap .total-comment__wrap{
+    border-bottom: 3px solid var(--maincolor);
+}
+
+.comment-line__wrap{
+    width: 100%;
+}
+
+.comment-line__wrap .nickname-box{
+    font-weight: 700;
+}
+
+.comment-line__wrap .content-box{
+}
+
+.comment-line__wrap .info-box{
+    font-size: 12px;
+}
+
+.comment-line__wrap .info-box a{
+    text-decoration: none;
+    color: #555;
+}
+
+li.comment-box{
+    color: #555;
+    border-bottom: 1px solid var(--grey);
+    margin-bottom: 8px;
+}
+
+
+.modal-body .content-box {
+    margin: 16px 0 8px 0;
+}
+
+button.nested-comment{
+    border: 0;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+}
+.modal-body .content-box button{
+    color: #fff;
+}
+
+.modal-body .content-box button:hover{
+    color: #fff;
+}
+
+.modal-body .content-box button.red {
+    background-color: var(--mainred);
+}
+
+.modal-body .content-box button.main {
+    background-color: var(--maincolor);
 }

@@ -46,7 +46,24 @@
               <b>등급</b>
               <span th:text="${member.ranking}"></span>
             </div>
-            <a th:href="@{/members/logout}" class="logout">로그아웃</a>
+            <button type="button" class="logout">로그아웃</button>
+            <script>
+              $('.logout').on("click", function () {
+                $.ajax({
+                  type: "post",
+                  url: "http://localhost:8080/members/logout",
+                  success: function (result){
+                    console.log(result);
+                    location.reload();
+                  },
+                  error: function (result){
+                    const response = result.responseJSON;
+                    console.log(response);
+                    location.reload();
+                  }
+                })
+              });
+            </script>
           </div>
 
         </div>

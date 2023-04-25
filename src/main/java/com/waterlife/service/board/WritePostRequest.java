@@ -1,4 +1,4 @@
-package com.waterlife.controller.post;
+package com.waterlife.service.board;
 
 import com.waterlife.entity.enums.Category;
 import lombok.Getter;

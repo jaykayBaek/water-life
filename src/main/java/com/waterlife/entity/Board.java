@@ -1,8 +1,7 @@
 package com.waterlife.entity;
 
-import com.waterlife.controller.post.WritePostRequest;
+import com.waterlife.service.board.WritePostRequest;
 import com.waterlife.entity.enums.Category;
-import jdk.jfr.BooleanFlag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -41,9 +40,9 @@ public class Board extends BaseEntity {
     private Boolean commentable;
     private Boolean recommendable;
 
-    private int likes;
-    private int dislikes;
     private int views;
+    private int likes;
+    private int commentTotalCount;
 
     public static Board createBoard(Member member, WritePostRequest request) {
         Board board = new Board();
@@ -53,9 +52,17 @@ public class Board extends BaseEntity {
         board.category = request.getCategory();
         board.commentable = request.getCommentable();
         board.recommendable = false;
-        board.likes = 0;
-        board.dislikes = 0;
         board.views = 0;
+        board.likes = 0;
+        board.commentTotalCount = 0;
         return board;
+    }
+
+    public void updateViews(int updatedViews) {
+        views = updatedViews;
+    }
+
+    public void updateCommentTotalCount(int updatedCommentTotalCount) {
+        commentTotalCount = updatedCommentTotalCount;
     }
 }

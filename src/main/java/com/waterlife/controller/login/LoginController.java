@@ -50,12 +50,18 @@ public class LoginController {
                 .body(resultResponse);
     }
 
-    @GetMapping("/members/logout")
-    public String logout(HttpSession session){
-
+    @PostMapping("/members/logout")
+    @ResponseBody
+    public ResponseEntity logout(HttpSession session){
         session.invalidate();
 
-        return "redirect:/";
+        ResultResponse resultResponse = new ResultResponse(
+                HttpStatus.OK.toString(), "로그아웃 완료", true
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(resultResponse);
     }
 
     private static void manageCookieAccordingToBoolean(LoginForm form, HttpServletResponse response) {

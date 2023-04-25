@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>슬기로운 물생활</title>
+
+  <th:block th:replace="~{common/common-setting :: common-setting}"></th:block>
+  <link rel="stylesheet" th:href="@{/css/my-info/my-info.css}" type="text/css">
+
+</head>
+
+
+<body>
+<div class="main">
+  <th:block th:replace="~{common/header :: header}"></th:block>
+
+  <article class="container mt-3">
+    <div class="list">
+      <ul class="d-flex">
+        <li>
+          <a th:href="@{/my-info}">내 정보</a>
+        </li>
+        <li>
+          <a class="bold" th:href="@{/my-info/posts}">내가 쓴 글</a>
+        </li>
+        <li>
+          <a th:href="@{/my-info/comments}">내가 쓴 댓글</a>
+        </li>
+      </ul>
+    </div>
+    <div class="row">
+      <div class="col-9">
+        <div class="table"></div>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <td colspan="2">제목</td>
+              <td>작성일</td>
+              <td>조회</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="post : ${posts}">
+              <td th:text="${post.id}"></td>
+              <td>
+                <a th:href="@{/posts/{postId}(postId=${post.id})}">
+                  <span th:text="${post.title}"></span>
+                  [<span th:text="${post.commentTotalCount}"></span>]
+                </a>
+              </td>
+              <td th:text="${#strings.substring(post.createdTime, 0, 10)}"></td>
+              <td th:text="${post.views}"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-3">
+        <th:block th:replace="common/login :: login"></th:block>
+      </div>
+    </div>
+  </article>
+
+  <th:block th:replace="~{common/footer :: footer}"></th:block>
+</div>
+</body>
+
+</html>
