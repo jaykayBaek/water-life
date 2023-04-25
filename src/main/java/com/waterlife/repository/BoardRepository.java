@@ -9,6 +9,13 @@ import org.springframework.data.repository.query.Param;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("select b from Board b " +
-            "join b.member m on m.id = :memberId")
+            "join b.member m on m.id = :memberId " +
+            "order by b.id desc")
     Page<Board> findMyWrotePosts(@Param("memberId") Long memberId, Pageable pageable);
+
+    @Query("select b from Board b " +
+            "join b.comments c " +
+            "where c.member.id = :memberId ")
+    Page<Board> findMyWroteComments(@Param("memberId") Long memberId, Pageable pageable);
+
 }

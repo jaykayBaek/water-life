@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,7 +38,11 @@ public class MyInfoController {
     }
 
     @GetMapping("/comments")
-    public String myWriteComments(){
-        return "";
+    public String myWriteComments(@SessionAttribute(name = SessionConst.MEMBER_ID, required = false) Long memberId, Model model,
+                                  @PageableDefault(size = 15, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+        memberInformationUtil.getMemberInformation(memberId, model);
+        Page<MyWrotePostsDto> posts = boardService.findMyWroteComments(memberId, pageable);
+        model.addAttribute("posts", posts);
+        return "my-info/comments";
     }
 }

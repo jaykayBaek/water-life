@@ -75,4 +75,9 @@ public class BoardService {
         Page<Board> findBoards = boardRepository.findMyWrotePosts(memberId, pageable);
         return findBoards.map(board -> new MyWrotePostsDto(board));
     }
+
+    public Page<MyWrotePostsDto> findMyWroteComments(Long memberId, Pageable pageable) {
+        Page<Board> findBoards = boardRepository.findMyWroteComments(memberId, pageable);
+        return findBoards.map(board -> new MyWrotePostsDto(board));
+    }
 }
