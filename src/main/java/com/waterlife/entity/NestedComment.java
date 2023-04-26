@@ -30,4 +30,13 @@ public class NestedComment extends BaseEntity {
     private Comment comment;
 
     private String content;
+
+    public static NestedComment createComment(Member member, Board board, Comment comment, String content) {
+        NestedComment nestedComment = new NestedComment();
+        nestedComment.member = member;
+        nestedComment.board = board;
+        nestedComment.comment = comment;
+        nestedComment.content = content;
+        return nestedComment;
+    }
 }
