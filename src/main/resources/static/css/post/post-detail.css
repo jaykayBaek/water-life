@@ -123,31 +123,11 @@ li.comment-box{
 }
 
 
-.modal-body .content-box {
-    margin: 16px 0 8px 0;
-}
-
 button.nested-comment, button.modify, button.delete{
     border: 0;
     background-color: transparent;
     padding: 0;
     margin: 0;
-}
-
-.modal-body .content-box button{
-    color: #fff;
-}
-
-.modal-body .content-box button:hover{
-    color: #fff;
-}
-
-.modal-body .content-box button.red {
-    background-color: var(--mainred);
-}
-
-.modal-body .content-box button.main {
-    background-color: var(--maincolor);
 }
 
 li.reply-box{
@@ -181,4 +161,11 @@ li.reply-box .reply-line__wrap button{
 .nested-comment__wrap .nested__comment-list{
     padding-left: 16px;
     background-color: var(--grey);
+}
+
+button.nested-modify, button.nested-delete {
+    border: 0;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
 }

@@ -48,4 +48,24 @@ public class CommentService {
                 .map(comment -> new CommentDto(comment))
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public void updateComment(Long memberId, Long commentId, String content) {
+        Member member = memberService.findMemberByMemberId(memberId);
+        Comment comment = findCommentByCommentId(commentId);
+
+        validateCommentMemberId(member, comment);
+        comment.updateContent(content);
+    }
+
+    private static void validateCommentMemberId(Member member, Comment comment) {
+        if(comment.getMember().getId() != member.getId()){
+            throw new CommentException(CommentErrorResult.NOT_MATCH_COMMENT_MEMBER_ID);
+        }
+    }
+
+    public Comment findCommentByCommentId(Long commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentException(CommentErrorResult.COMMENT_NOT_FOUND_BY_FIND_COMMENT_ID));
+    }
 }

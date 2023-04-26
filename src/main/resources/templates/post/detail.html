@@ -123,17 +123,18 @@
                         <button type="button" class="delete" th:data-comment-id="${comment.commentId}">삭제하기</button>
                       </th:block>
                     </div>
+                    <!--  대댓글  -->
                     <div class="nested-comment__wrap">
                       <ul class="nested__comment-list">
-                        <li th:each="nestedComment : ${nestedComments}" th:if="${comment.commentId eq nestedComment.commentId}">
+                        <li th:each="nestedComment : ${nestedComments}" class="nested-comment-box" th:if="${comment.commentId eq nestedComment.commentId}">
                           <div class="nickname-box" th:text="${nestedComment.nickname}"></div>
-                          <div class="content-box" th:text="${nestedComment.content}"></div>
+                          <div class="nested-content-box" th:text="${nestedComment.content}"></div>
                           <div class="info-box">
                             <span th:text="${#strings.substring(nestedComment.createdTime, 0, 10)}"></span>
                             <th:block th:if="${memberId eq nestedComment.memberId}">
-                              <button type="button" class="modify" th:data-comment-id="${comment.commentId}">수정하기</button>
+                              <button type="button" class="nested-modify" th:data-nested-comment-id="${nestedComment.nestedCommentId}">수정하기</button>
 
-                              <button type="button" class="delete" th:data-comment-id="${comment.commentId}">삭제하기</button>
+                              <button type="button" class="nested-delete" th:data-nested-comment-id="${comment.commentId}">삭제하기</button>
                             </th:block>
                           </div>
                         </li>
@@ -144,6 +145,7 @@
               </ul>
               <script>
                 $().ready(function() {
+                  // 답글
                   $('.nested-comment').on("click", function () {
                     const replyBox = $(this).closest('li').next('.reply-box');
                     const commentId = $(this).closest('li').data('li-id');
@@ -159,12 +161,14 @@
                       $(this).closest('li').after(html);
                     }
                   });
-
                   $(document).on("click", ".submit-reply", function () {
                     const boardId = [[${board.boardId}]];
                     const content = $(this).closest('.reply-line__wrap').find('.reply-textarea').val();
                     const commentId = $(this).closest('.reply-line__wrap').find('.submit-reply').data('comment-id');
-
+                    if(content.trim() == ''){
+                      alert('댓글을 작성해주세요.');
+                      return false;
+                    }
                     $.ajax({
                       type: "post",
                       url: "http://localhost:8080/nested-comments",
@@ -187,6 +191,79 @@
                       }
                     })
                   });
+
+                  // 댓글 수정
+                  $('.comment-box').on("click", ".modify", function (){
+                    const $commentBox = $(this).closest('.comment-box');
+                    const commentId = $(this).data('comment-id');
+                    const html = $commentBox.find('.content-box').text();
+                    $commentBox.find('.content-box').data('original-html', html).html(
+                            '<textarea class="form-control modified-comment">'+html+'</textarea>' +
+                            '<button class="btn btn-sm btn-outline-dark confirm" data-comment-id="'+commentId+'">수정</button>' +
+                            '<button class="btn btn-sm btn-outline-dark cancel">취소</button>'
+                    );
+                  });
+                  // 댓글 수정 취소
+                  $('.comment-box').on('click', '.cancel', function() {
+                    const $commentBox = $(this).closest('.comment-box');
+                    const html = $commentBox.find('.content-box').data('original-html');
+                    $commentBox.find('.content-box').html(html);
+                  });
+                  // 댓글 수정 확인
+                  $('.comment-box').on('click', '.confirm', function() {
+                    const commentId = $(this).data('comment-id');
+                    const modifiedContent = $(this).siblings('.modified-comment').val();
+
+                    if(modifiedContent.trim() == ''){
+                      alert('댓글을 작성해주세요.');
+                      return false;
+                    }
+
+                    $.ajax({
+                      method: "patch",
+                      url: "http://localhost:8080/comments/"+commentId,
+                      data: {
+                        content: modifiedContent
+                      },
+                      success: function (result){
+                        console.log(result);
+                        location.reload();
+                      },
+                      error: function (result){
+                        const response = result.responseJSON;
+                        console.log(response);
+                        alert(response.message);
+                      }
+                    });
+                  });
+
+                  // - - - -  - - - -
+
+                  // 대댓글 수정
+                  $('.nested-comment__wrap').on('click', '.nested-modify', function() {
+                    const $nestedCommentBox = $(this).closest('.nested-comment-box');
+                    const nestedCommentId = $(this).data('nested-comment-id');
+                    const html = $nestedCommentBox.find('.nested-content-box').text();
+                    $nestedCommentBox.find('.nested-content-box').data('original-html', html).html(
+                            '<textarea class="form-control">'+html+'</textarea>' +
+                            '<button class="btn btn-sm btn-outline-dark nested-confirm" data-nested-comment-id="'+nestedCommentId+'">수정</button>' +
+                            '<button class="btn btn-sm btn-outline-dark nested-cancel">취소</button>'
+                    );
+                  });
+
+                  // 대댓글 수정 취소
+                  $('.nested-comment__wrap').on('click', '.nested-cancel', function() {
+                    const $nestedCommentBox = $(this).closest('.nested-comment-box');
+                    const html = $nestedCommentBox.find('.nested-content-box').data('original-html');
+                    $nestedCommentBox.find('.nested-content-box').html(html);
+                  });
+
+                  // 대댓글 수정 확인
+                  $('.nested-comment__wrap').on('click', '.nested-confirm', function() {
+                    const nestedCommentId = $(this).data('nested-comment-id');
+                    const content = $(this).prev('textarea').val();
+
+                  });
                 });
               </script>
             </div>
@@ -203,8 +280,12 @@
                       const writeComment = () => {
                         const content = $('#comments').val();
                         const boardId = [[${board.boardId}]];
+                        if(content.trim() == ''){
+                          alert('댓글을 작성해주세요.');
+                          return false;
+                        }
                         $.ajax({
-                          type: "post",
+                          method: "post",
                           url: "http://localhost:8080/comments",
                           data: {
                             content: content,

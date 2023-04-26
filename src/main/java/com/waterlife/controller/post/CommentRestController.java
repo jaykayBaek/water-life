@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -30,6 +27,20 @@ public class CommentRestController {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
+                .body(resultResponse);
+    }
+
+    @PatchMapping("/{commentId}")
+    public ResponseEntity<ResultResponse> updateComment(@PathVariable(name = "commentId") Long commentId,
+                                                        @SessionAttribute(name = SessionConst.MEMBER_ID, required = false) Long memberId,
+                                                        @RequestParam String content){
+        commentService.updateComment(memberId, commentId, content);
+
+        ResultResponse resultResponse = new ResultResponse(
+                HttpStatus.OK.toString(), CommentRequestResult.UPDATE_SUCCESS.getMessage(), true);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
                 .body(resultResponse);
     }
 }
