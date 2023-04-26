@@ -5,6 +5,8 @@ import com.waterlife.entity.Comment;
 import com.waterlife.entity.Member;
 import com.waterlife.exception.board.BoardErrorResult;
 import com.waterlife.exception.board.BoardException;
+import com.waterlife.exception.comment.CommentErrorResult;
+import com.waterlife.exception.comment.CommentException;
 import com.waterlife.repository.CommentRepository;
 import com.waterlife.service.board.BoardService;
 import com.waterlife.service.member.MemberService;

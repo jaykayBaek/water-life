@@ -1,12 +1,10 @@
 package com.waterlife.advisor.exception;
 
 import com.waterlife.controller.ResultResponse;
-import com.waterlife.controller.member.MemberRequestResult;
 import com.waterlife.exception.like.LikeException;
 import com.waterlife.exception.member.MemberException;
-import com.waterlife.service.comment.CommentException;
+import com.waterlife.exception.comment.CommentException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

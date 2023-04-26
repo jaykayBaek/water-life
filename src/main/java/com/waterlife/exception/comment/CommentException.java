@@ -1,4 +1,4 @@
-package com.waterlife.service.comment;
+package com.waterlife.exception.comment;
 
 import lombok.Getter;
 
