@@ -30,7 +30,12 @@ public class NestedCommentService {
         Member member = memberService.findMemberByMemberId(memberId);
         Board board = boardService.findBoardByBoardId(boardId);
         Comment comment = commentService.findCommentByCommentId(commentId);
+
         NestedComment nestedComment = NestedComment.createComment(member, board, comment, content);
+
+        int commentTotalCount = board.getCommentTotalCount();
+        board.updateCommentTotalCount(++commentTotalCount);
+
         return nestedCommentRepository.save(nestedComment).getId();
     }
 
