@@ -39,4 +39,8 @@ public class NestedComment extends BaseEntity {
         nestedComment.content = content;
         return nestedComment;
     }
+
+    public void updateContent(String updatedContent) {
+        content = updatedContent;
+    }
 }

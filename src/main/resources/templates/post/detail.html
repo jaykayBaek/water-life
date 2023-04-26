@@ -232,9 +232,17 @@
                       error: function (result){
                         const response = result.responseJSON;
                         console.log(response);
-                        alert(response.message);
+                        if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
+                          alert('로그인 이후 사용할 수 있는 서비스입니다.');
+                          return false;
+                        }
                       }
                     });
+                  });
+
+                  // 댓글 삭제
+                  $('.comment-box').on("click", ".delete", function (){
+                    const commentId = $(this).data('comment-id');
                   });
 
                   // - - - -  - - - -
@@ -261,8 +269,26 @@
                   // 대댓글 수정 확인
                   $('.nested-comment__wrap').on('click', '.nested-confirm', function() {
                     const nestedCommentId = $(this).data('nested-comment-id');
-                    const content = $(this).prev('textarea').val();
-
+                    const modifiedContent = $(this).prev('textarea').val();
+                    $.ajax({
+                      method: "patch",
+                      url: "http://localhost:8080/nested-comments/"+nestedCommentId,
+                      data: {
+                        content: modifiedContent
+                      },
+                      success: function (result){
+                        console.log(result);
+                        location.reload();
+                      },
+                      error: function (result){
+                        const response = result.responseJSON;
+                        console.log(response);
+                        if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
+                          alert('로그인 이후 사용할 수 있는 서비스입니다.');
+                          return false;
+                        }
+                      }
+                    });
                   });
                 });
               </script>

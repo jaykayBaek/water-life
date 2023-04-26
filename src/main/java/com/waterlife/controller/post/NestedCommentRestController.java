@@ -29,4 +29,17 @@ public class NestedCommentRestController {
                 .status(HttpStatus.CREATED)
                 .body(resultResponse);
     }
+
+    @PatchMapping("/{nestedCommentId}")
+    public ResponseEntity<ResultResponse> updateNestedComment(@SessionAttribute(name = SessionConst.MEMBER_ID, required = false) Long memberId,
+                                                              @PathVariable(name = "nestedCommentId") Long nestedCommentId, String content){
+        nestedCommentService.updateNestedComment(memberId, nestedCommentId, content);
+
+        ResultResponse resultResponse = new ResultResponse(
+                HttpStatus.CREATED.toString(), CommentRequestResult.WRITE_SUCCESS.getMessage(), true);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(resultResponse);
+    }
 }
