@@ -65,4 +65,12 @@ public class Board extends BaseEntity {
     public void updateCommentTotalCount(int updatedCommentTotalCount) {
         commentTotalCount = updatedCommentTotalCount;
     }
+
+    public void updateLikes(int updatedLikes) {
+        likes = updatedLikes;
+    }
+
+    public void updateRecommendable(boolean updatedRecommendable) {
+        recommendable = updatedRecommendable;
+    }
 }

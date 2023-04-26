@@ -28,11 +28,11 @@ public class BoardLikesLog extends BaseEntity{
     private Boolean isLikes;
     
     /* --- 생성 메소드 --- */
-    public static BoardLikesLog createLikesLog(Member member, Board board, Boolean isLikes){
+    public static BoardLikesLog createLikesLog(Member member, Board board, Boolean isLike){
         BoardLikesLog log = new BoardLikesLog();
         log.member = member;
         log.board = board;
-        log.isLikes = isLikes;
+        log.isLikes = isLike;
         return log;
     }
 }
