@@ -1,4 +1,4 @@
-package com.waterlife.service.utils;
+package com.waterlife.exception.email;
 
 import javax.mail.MessagingException;
 

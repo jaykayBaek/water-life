@@ -1,6 +1,7 @@
 package com.waterlife.service.utils;
 
 import com.waterlife.consts.PathConst;
+import com.waterlife.exception.post.PostException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
 package com.waterlife.controller;
 
 import com.waterlife.consts.SessionConst;
-import com.waterlife.service.member.MemberService;
+import com.waterlife.service.utils.MemberInformationUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

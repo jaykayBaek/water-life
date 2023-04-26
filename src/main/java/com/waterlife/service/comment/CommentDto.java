@@ -1,4 +1,4 @@
-package com.waterlife.controller.post;
+package com.waterlife.service.comment;
 
 import com.waterlife.entity.Comment;
 import lombok.Getter;

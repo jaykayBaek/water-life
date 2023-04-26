@@ -1,5 +1,6 @@
 package com.waterlife.service.utils;
 
+import com.waterlife.exception.email.EmailException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;

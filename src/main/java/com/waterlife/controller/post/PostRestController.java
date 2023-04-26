@@ -1,6 +1,5 @@
 package com.waterlife.controller.post;
 
-import com.waterlife.controller.FileUploadResultResponse;
 import com.waterlife.service.utils.WysiwygImageUploadUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

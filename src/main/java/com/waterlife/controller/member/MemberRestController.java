@@ -1,6 +1,5 @@
 package com.waterlife.controller.member;
 
-import com.waterlife.controller.FindLoginIdResultResponse;
 import com.waterlife.controller.ResultResponse;
 import com.waterlife.service.member.MemberRegisterForm;
 import com.waterlife.service.member.MemberService;

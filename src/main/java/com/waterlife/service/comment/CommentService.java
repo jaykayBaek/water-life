@@ -1,6 +1,5 @@
 package com.waterlife.service.comment;
 
-import com.waterlife.controller.post.CommentDto;
 import com.waterlife.entity.Board;
 import com.waterlife.entity.Comment;
 import com.waterlife.entity.Member;

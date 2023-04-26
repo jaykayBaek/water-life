@@ -2,7 +2,6 @@
 package com.waterlife.controller.myinfo;
 
 import com.waterlife.consts.SessionConst;
-import com.waterlife.controller.ChangeMemberResultResponse;
 import com.waterlife.controller.ResultResponse;
 import com.waterlife.controller.member.MemberRequestResult;
 import com.waterlife.service.member.ChangeMemberInfoResponse;

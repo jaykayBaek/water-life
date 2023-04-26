@@ -1,5 +1,6 @@
-package com.waterlife.controller;
+package com.waterlife.service.utils;
 
+import com.waterlife.service.member.MemberInformationResponse;
 import com.waterlife.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

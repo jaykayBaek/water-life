@@ -1,5 +1,6 @@
-package com.waterlife.controller;
+package com.waterlife.controller.member;
 
+import com.waterlife.controller.ResultResponse;
 import lombok.Getter;
 
 @Getter

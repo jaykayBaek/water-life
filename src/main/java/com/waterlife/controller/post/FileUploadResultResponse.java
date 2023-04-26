@@ -1,6 +1,7 @@
-package com.waterlife.controller;
+package com.waterlife.controller.post;
 
 
+import com.waterlife.controller.ResultResponse;
 import lombok.Getter;
 
 @Getter

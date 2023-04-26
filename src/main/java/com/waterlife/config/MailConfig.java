@@ -7,6 +7,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+import java.util.Properties;
+
 @Configuration
 @PropertySource("classpath:mail.properties")
 public class MailConfig {
@@ -31,6 +33,13 @@ public class MailConfig {
         mailSender.setUsername(username);
         mailSender.setPassword(password);
         mailSender.setDefaultEncoding("UTF-8");
+
+        Properties props = new Properties();
+        props.put("mail.smtp.starttls.enable", true);
+        props.put("mail.smtp.auth", true);
+        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+        mailSender.setJavaMailProperties(props);
+
         return mailSender;
     }
 }

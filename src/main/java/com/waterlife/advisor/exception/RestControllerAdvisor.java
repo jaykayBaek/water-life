@@ -1,5 +1,6 @@
-package com.waterlife.controller;
+package com.waterlife.advisor.exception;
 
+import com.waterlife.controller.ResultResponse;
 import com.waterlife.controller.member.MemberRequestResult;
 import com.waterlife.exception.member.MemberException;
 import lombok.extern.slf4j.Slf4j;

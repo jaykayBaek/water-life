@@ -1,6 +1,5 @@
 package com.waterlife.service.member;
 
-import com.waterlife.controller.MemberInformationResponse;
 import com.waterlife.entity.Member;
 import com.waterlife.exception.member.MemberErrorResult;
 import com.waterlife.exception.member.MemberException;

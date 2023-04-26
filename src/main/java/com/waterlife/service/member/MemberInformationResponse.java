@@ -1,4 +1,4 @@
-package com.waterlife.controller;
+package com.waterlife.service.member;
 
 import com.waterlife.entity.Member;
 import lombok.Getter;

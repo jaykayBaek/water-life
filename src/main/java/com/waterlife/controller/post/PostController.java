@@ -1,10 +1,11 @@
 package com.waterlife.controller.post;
 
 import com.waterlife.consts.SessionConst;
-import com.waterlife.controller.MemberInformationUtil;
+import com.waterlife.service.utils.MemberInformationUtil;
 import com.waterlife.service.board.BoardInformationResponse;
 import com.waterlife.service.board.BoardService;
 import com.waterlife.service.board.WritePostRequest;
+import com.waterlife.service.comment.CommentDto;
 import com.waterlife.service.comment.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,7 @@
 package com.waterlife.controller.myinfo;
 
 import com.waterlife.consts.SessionConst;
-import com.waterlife.controller.MemberInformationUtil;
+import com.waterlife.service.utils.MemberInformationUtil;
 import com.waterlife.service.board.BoardService;
 import com.waterlife.service.board.MyWrotePostsDto;
 import lombok.RequiredArgsConstructor;
