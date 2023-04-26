@@ -118,7 +118,7 @@ ul{
 
 li.comment-box{
     color: #555;
-    border-bottom: 1px solid var(--grey);
+    border-bottom: 1px solid #555;
     margin-bottom: 8px;
 }
 
@@ -127,12 +127,13 @@ li.comment-box{
     margin: 16px 0 8px 0;
 }
 
-button.nested-comment{
+button.nested-comment, button.modify, button.delete{
     border: 0;
     background-color: transparent;
     padding: 0;
     margin: 0;
 }
+
 .modal-body .content-box button{
     color: #fff;
 }
@@ -147,4 +148,37 @@ button.nested-comment{
 
 .modal-body .content-box button.main {
     background-color: var(--maincolor);
+}
+
+li.reply-box{
+    background-color: var(--grey);
+    width: 100%;
+    height: 100px;
+    display: flex;
+    justify-content: end;
+    align-items: center
+}
+
+li.reply-box .reply-line__wrap{
+    width: 700px;
+}
+
+li.reply-box .reply-line__wrap textarea{
+    width: 80%;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+}
+
+li.reply-box .reply-line__wrap button{
+    border: 0;
+    background-color: var(--maincolor);
+    color: #fff;
+    width: 64px;
+    float: right;
+    margin-right: 16px;
+}
+
+.nested-comment__wrap .nested__comment-list{
+    padding-left: 16px;
+    background-color: var(--grey);
 }

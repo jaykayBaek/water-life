@@ -12,6 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 @Transactional(readOnly = true)
@@ -29,5 +32,13 @@ public class NestedCommentService {
         Comment comment = commentService.findCommentByCommentId(commentId);
         NestedComment nestedComment = NestedComment.createComment(member, board, comment, content);
         return nestedCommentRepository.save(nestedComment).getId();
+    }
+
+    public List<NestedCommentDto> findByBoardId(Long boardId) {
+        List<NestedComment> commentList = nestedCommentRepository.findByBoardId(boardId);
+
+        return commentList.stream()
+                .map(comment -> new NestedCommentDto(comment))
+                .collect(Collectors.toList());
     }
 }

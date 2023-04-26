@@ -107,42 +107,88 @@
             </div>
             <div class="content-block comment-block">
               <!--  댓글  -->
-              <ul th:each="comment : ${comments}">
-                <li class="comment-box">
+              <ul>
+                <li th:each="comment : ${comments}" class="comment-box" th:data-li-id="${comment.commentId}">
                   <div class="comment-line__wrap">
                     <div class="nickname-box" th:text="${comment.nickname}"></div>
                     <div class="content-box" th:text="${comment.content}"></div>
                     <div class="info-box">
                       <span th:text="${#strings.substring(comment.createdTime, 0, 10)}"></span>
                       <th:block th:if="${memberId ne null}">
-                        <button type="button" class="nested-comment" data-bs-toggle="modal" data-bs-target="#nestedComment">답글 쓰기</button>
-                        <div class="modal fade" id="nestedComment" tabindex="-1" aria-labelledby="nestedComment" aria-hidden="true">
-                          <div class="modal-dialog">
-                            <div class="modal-content">
-                              <div class="modal-body">
-                                <div class="content-box">
-                                  <h5 class="modal-title">답글 달기</h5>
-                                </div>
-                                <div class="content-box">
-                                  <textarea class="form-control"></textarea>
-                                </div>
-                                <div class="content-box">
-                                  <button type="button" class="btn btn-sm red" data-bs-dismiss="modal">창 닫기</button>
-                                  <button type="button" class="btn btn-sm main">답글 달기</button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                        <button type="button" class="nested-comment" th:data-btn="${comment.commentId}">답글 쓰기</button>
                       </th:block>
                       <th:block th:if="${memberId eq comment.memberId}">
-                        <a href="">수정하기</a>
-                        <a href="">삭제하기</a>
+                        <button type="button" class="modify" th:data-comment-id="${comment.commentId}">수정하기</button>
+
+                        <button type="button" class="delete" th:data-comment-id="${comment.commentId}">삭제하기</button>
                       </th:block>
+                    </div>
+                    <div class="nested-comment__wrap">
+                      <ul class="nested__comment-list">
+                        <li th:each="nestedComment : ${nestedComments}" th:if="${comment.commentId eq nestedComment.commentId}">
+                          <div class="nickname-box" th:text="${nestedComment.nickname}"></div>
+                          <div class="content-box" th:text="${nestedComment.content}"></div>
+                          <div class="info-box">
+                            <span th:text="${#strings.substring(nestedComment.createdTime, 0, 10)}"></span>
+                            <th:block th:if="${memberId eq nestedComment.memberId}">
+                              <button type="button" class="modify" th:data-comment-id="${comment.commentId}">수정하기</button>
+
+                              <button type="button" class="delete" th:data-comment-id="${comment.commentId}">삭제하기</button>
+                            </th:block>
+                          </div>
+                        </li>
+                      </ul>
                     </div>
                   </div>
                 </li>
               </ul>
+              <script>
+                $().ready(function() {
+                  $('.nested-comment').on("click", function () {
+                    const replyBox = $(this).closest('li').next('.reply-box');
+                    const commentId = $(this).closest('li').data('li-id');
+                    if (replyBox.length) {
+                      replyBox.remove();
+                    } else {
+                      const html = '<li class="reply-box">' +
+                              '<div class="reply-line__wrap">' +
+                              '<textarea class="reply-textarea"></textarea>' +
+                              '<button type="button" class="submit-reply" data-comment-id="'+commentId+'">등록</button>' +
+                              '</div>' +
+                              '</li>';
+                      $(this).closest('li').after(html);
+                    }
+                  });
+
+                  $(document).on("click", ".submit-reply", function () {
+                    const boardId = [[${board.boardId}]];
+                    const content = $(this).closest('.reply-line__wrap').find('.reply-textarea').val();
+                    const commentId = $(this).closest('.reply-line__wrap').find('.submit-reply').data('comment-id');
+
+                    $.ajax({
+                      type: "post",
+                      url: "http://localhost:8080/nested-comments",
+                      data: {
+                        boardId: boardId,
+                        commentId: commentId,
+                        content: content
+                      },
+                      success: function (result){
+                        console.log(result);
+                        location.reload();
+                      },
+                      error: function (result){
+                        const response = result.responseJSON;
+                        console.log(response);
+                        if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
+                          alert('로그인 이후 사용할 수 있는 서비스입니다.');
+                          return false;
+                        }
+                      }
+                    })
+                  });
+                });
+              </script>
             </div>
             <th:block th:if="${board.commentable eq true}">
               <div class="content-block comment__write-block">

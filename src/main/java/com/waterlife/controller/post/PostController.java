@@ -1,6 +1,8 @@
 package com.waterlife.controller.post;
 
 import com.waterlife.consts.SessionConst;
+import com.waterlife.service.comment.NestedCommentDto;
+import com.waterlife.service.comment.NestedCommentService;
 import com.waterlife.service.utils.MemberInformationUtil;
 import com.waterlife.service.board.BoardInformationResponse;
 import com.waterlife.service.board.BoardService;
@@ -22,6 +24,7 @@ import java.util.List;
 public class PostController {
     private final BoardService boardService;
     private final CommentService commentService;
+    private final NestedCommentService nestedCommentService;
     private final MemberInformationUtil memberInformationUtil;
 
     @GetMapping("/new")
@@ -48,6 +51,9 @@ public class PostController {
 
         List<CommentDto> comments = commentService.findByBoardId(boardId);
         model.addAttribute("comments", comments);
+
+        List<NestedCommentDto> nestedComments = nestedCommentService.findByBoardId(boardId);
+        model.addAttribute("nestedComments", nestedComments);
 
         boardService.addBoardViews(boardId);
         return "post/detail";
