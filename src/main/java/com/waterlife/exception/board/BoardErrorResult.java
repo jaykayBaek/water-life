@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum BoardErrorResult {
     BOARD_NOT_FOUND_BY_FIND_BOARD_ID(HttpStatus.NOT_FOUND, "검색한 게시글을 찾을 수 없습니다."),
+    BOARD_NOT_FOUND_BY_COMMENT_ID(HttpStatus.NOT_FOUND, "해당하는 게시글을 찾을 수 없습니다."),
     NOT_COMMENTABLE(HttpStatus.BAD_REQUEST, "댓글을 작성할 수 없는 게시글입니다.");
     private final HttpStatus status;
     private final String message;

@@ -109,38 +109,68 @@
               <!--  댓글  -->
               <ul>
                 <li th:each="comment : ${comments}" class="comment-box" th:data-li-id="${comment.commentId}">
-                  <div class="comment-line__wrap">
-                    <div class="nickname-box" th:text="${comment.nickname}"></div>
-                    <div class="content-box" th:text="${comment.content}"></div>
-                    <div class="info-box">
-                      <span th:text="${#strings.substring(comment.createdTime, 0, 10)}"></span>
-                      <th:block th:if="${memberId ne null}">
-                        <button type="button" class="nested-comment" th:data-btn="${comment.commentId}">답글 쓰기</button>
-                      </th:block>
-                      <th:block th:if="${memberId eq comment.memberId}">
-                        <button type="button" class="modify" th:data-comment-id="${comment.commentId}">수정하기</button>
+                  <th:block th:if="${not comment.isDeleted}">
+                    <div class="comment-line__wrap">
+                      <div class="nickname-box" th:text="${comment.nickname}"></div>
+                      <div class="content-box" th:text="${comment.content}"></div>
+                      <div class="info-box">
+                        <span th:text="${#strings.substring(comment.createdTime, 0, 10)}"></span>
+                        <th:block th:if="${memberId ne null}">
+                          <button type="button" class="nested-comment" th:data-btn="${comment.commentId}">답글 쓰기</button>
+                        </th:block>
+                        <th:block th:if="${memberId eq comment.memberId}">
+                          <button type="button" class="modify" th:data-comment-id="${comment.commentId}">수정하기</button>
 
-                        <button type="button" class="delete" th:data-comment-id="${comment.commentId}">삭제하기</button>
-                      </th:block>
-                    </div>
-                    <!--  대댓글  -->
-                    <div class="nested-comment__wrap">
-                      <ul class="nested__comment-list">
-                        <li th:each="nestedComment : ${nestedComments}" class="nested-comment-box" th:if="${comment.commentId eq nestedComment.commentId}">
-                          <div class="nickname-box" th:text="${nestedComment.nickname}"></div>
-                          <div class="nested-content-box" th:text="${nestedComment.content}"></div>
-                          <div class="info-box">
-                            <span th:text="${#strings.substring(nestedComment.createdTime, 0, 10)}"></span>
-                            <th:block th:if="${memberId eq nestedComment.memberId}">
-                              <button type="button" class="nested-modify" th:data-nested-comment-id="${nestedComment.nestedCommentId}">수정하기</button>
+                          <button type="button" class="delete" th:data-comment-id="${comment.commentId}">삭제하기</button>
+                        </th:block>
+                      </div>
+                      <!--  대댓글  -->
+                      <div class="nested-comment__wrap">
+                        <ul class="nested__comment-list">
+                          <li th:each="nestedComment : ${nestedComments}" class="nested-comment-box">
+                            <th:block th:if="${comment.commentId eq nestedComment.commentId}">
+                              <div class="nickname-box" th:text="${nestedComment.nickname}"></div>
+                              <div class="nested-content-box" th:text="${nestedComment.content}"></div>
+                              <div class="info-box">
+                                <span th:text="${#strings.substring(nestedComment.createdTime, 0, 10)}"></span>
+                                <th:block th:if="${memberId eq nestedComment.memberId}">
+                                  <button type="button" class="nested-modify" th:data-nested-comment-id="${nestedComment.nestedCommentId}">수정하기</button>
 
-                              <button type="button" class="nested-delete" th:data-nested-comment-id="${comment.commentId}">삭제하기</button>
+                                  <button type="button" class="nested-delete" th:data-nested-comment-id="${comment.commentId}">삭제하기</button>
+                                </th:block>
+                              </div>
                             </th:block>
-                          </div>
-                        </li>
-                      </ul>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
-                  </div>
+                  </th:block>
+                  <th:block th:each="nestedComment : ${nestedComments}" th:if="${comment.isDeleted  && nestedComment.commentId eq comment.commentId}">
+                    <div class="comment-line__wrap">
+                      <div class="content-box">
+                        삭제된 댓글입니다.
+                      </div>
+                      <!--  대댓글  -->
+                      <div class="nested-comment__wrap">
+                        <ul class="nested__comment-list">
+                          <li th:each="nestedComment : ${nestedComments}" class="nested-comment-box">
+                            <th:block th:if="${comment.commentId eq nestedComment.commentId}">
+                              <div class="nickname-box" th:text="${nestedComment.nickname}"></div>
+                              <div class="nested-content-box" th:text="${nestedComment.content}"></div>
+                              <div class="info-box">
+                                <span th:text="${#strings.substring(nestedComment.createdTime, 0, 10)}"></span>
+                                <th:block th:if="${memberId eq nestedComment.memberId}">
+                                  <button type="button" class="nested-modify" th:data-nested-comment-id="${nestedComment.nestedCommentId}">수정하기</button>
+
+                                  <button type="button" class="nested-delete" th:data-nested-comment-id="${comment.commentId}">삭제하기</button>
+                                </th:block>
+                              </div>
+                            </th:block>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </th:block>
                 </li>
               </ul>
               <script>
@@ -243,6 +273,23 @@
                   // 댓글 삭제
                   $('.comment-box').on("click", ".delete", function (){
                     const commentId = $(this).data('comment-id');
+
+                    $.ajax({
+                      method: "delete",
+                      url: "http://localhost:8080/comments/"+commentId,
+                      success: function (result){
+                        console.log(result);
+                        location.reload();
+                      },
+                      error: function (result){
+                        const response = result.responseJSON;
+                        console.log(response);
+                        if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
+                          alert('로그인 이후 사용할 수 있는 서비스입니다.');
+                          return false;
+                        }
+                      }
+                    })
                   });
 
                   // - - - -  - - - -
@@ -290,6 +337,29 @@
                       }
                     });
                   });
+
+                  // 댓글 삭제
+                  $('.nested-comment__wrap').on("click", ".nested-delete", function (){
+                    const commentId = $(this).data('nested-comment-id');
+                    console.log("commentId = " + commentId);
+                    // $.ajax({
+                    //   method: "delete",
+                    //   url: "http://localhost:8080/comments/"+commentId,
+                    //   success: function (result){
+                    //     console.log(result);
+                    //     location.reload();
+                    //   },
+                    //   error: function (result){
+                    //     const response = result.responseJSON;
+                    //     console.log(response);
+                    //     if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
+                    //       alert('로그인 이후 사용할 수 있는 서비스입니다.');
+                    //       return false;
+                    //     }
+                    //   }
+                    // })
+                  });
+
                 });
               </script>
             </div>

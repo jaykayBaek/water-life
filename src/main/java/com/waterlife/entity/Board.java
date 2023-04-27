@@ -44,6 +44,8 @@ public class Board extends BaseEntity {
     private int likes;
     private int commentTotalCount;
 
+    private Boolean isDeleted;
+
     public static Board createBoard(Member member, WritePostRequest request) {
         Board board = new Board();
         board.member = member;
@@ -55,6 +57,7 @@ public class Board extends BaseEntity {
         board.views = 0;
         board.likes = 0;
         board.commentTotalCount = 0;
+        board.isDeleted = false;
         return board;
     }
 

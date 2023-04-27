@@ -70,4 +70,17 @@ public class CommentService {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentException(CommentErrorResult.COMMENT_NOT_FOUND_BY_FIND_COMMENT_ID));
     }
+
+    @Transactional
+    public void deleteComment(Long memberId, Long commentId) {
+        Member member = memberService.findMemberByMemberId(memberId);
+        Comment comment = findCommentByCommentId(commentId);
+
+        Board board = boardService.findBoardByCommentId(commentId);
+        int commentTotalCount = board.getCommentTotalCount();
+        board.updateCommentTotalCount(--commentTotalCount);
+
+        validateCommentMemberId(member, comment);
+        comment.updateDeletedStatus(true);
+    }
 }

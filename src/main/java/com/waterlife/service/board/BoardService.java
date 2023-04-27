@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @Transactional(readOnly = true)
@@ -79,5 +81,11 @@ public class BoardService {
     public Page<MyWrotePostsDto> findMyWroteComments(Long memberId, Pageable pageable) {
         Page<Board> findBoards = boardRepository.findMyWroteComments(memberId, pageable);
         return findBoards.map(board -> new MyWrotePostsDto(board));
+    }
+
+    public Board findBoardByCommentId(Long commentId) {
+        return boardRepository.findByCommentId(commentId)
+                .orElseThrow(() -> new BoardException(BoardErrorResult.BOARD_NOT_FOUND_BY_FIND_BOARD_ID));
+
     }
 }

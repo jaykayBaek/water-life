@@ -13,6 +13,7 @@ public class CommentDto {
     private String nickname;
     private LocalDateTime createdTime;
     private String content;
+    private Boolean isDeleted;
 
     public CommentDto(Comment comment) {
         commentId = comment.getId();
@@ -20,5 +21,6 @@ public class CommentDto {
         nickname = comment.getMember().getNickname();
         createdTime = comment.getCreatedTime();
         content = comment.getContent();
+        isDeleted = comment.getIsDeleted();
     }
 }

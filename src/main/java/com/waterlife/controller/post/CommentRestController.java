@@ -43,4 +43,17 @@ public class CommentRestController {
                 .status(HttpStatus.OK)
                 .body(resultResponse);
     }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<ResultResponse> deleteComment(@PathVariable(name = "commentId") Long commentId,
+                                                        @SessionAttribute(name = SessionConst.MEMBER_ID, required = false) Long memberId){
+        commentService.deleteComment(memberId, commentId);
+
+        ResultResponse resultResponse = new ResultResponse(
+                HttpStatus.NO_CONTENT.toString(), CommentRequestResult.DELETE_SUCCESS.getMessage(), true);
+        
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .body(resultResponse);
+    }
 }

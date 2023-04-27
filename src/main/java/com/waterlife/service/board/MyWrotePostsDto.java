@@ -2,7 +2,6 @@ package com.waterlife.service.board;
 
 import com.waterlife.entity.Board;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
@@ -13,6 +12,7 @@ public class MyWrotePostsDto {
     private int commentTotalCount;
     private LocalDateTime createdTime;
     private int views;
+    private Boolean isDeleted;
 
     public MyWrotePostsDto(Board board) {
         this.id = board.getId();
@@ -20,5 +20,6 @@ public class MyWrotePostsDto {
         this.commentTotalCount = board.getCommentTotalCount();
         this.createdTime = board.getCreatedTime();
         this.views = board.getViews();
+        this.isDeleted = board.getIsDeleted();
     }
 }

@@ -3,7 +3,6 @@ package com.waterlife.controller.post;
 import com.waterlife.consts.SessionConst;
 import com.waterlife.controller.ResultResponse;
 import com.waterlife.service.comment.NestedCommentService;
-import com.waterlife.service.comment.WriteCommentRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

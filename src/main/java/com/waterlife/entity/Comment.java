@@ -27,15 +27,22 @@ public class Comment extends BaseEntity {
 
     private String content;
 
+    private Boolean isDeleted;
+
     public static Comment createComment(Member findMember, Board findBoard, String content) {
         Comment comment = new Comment();
         comment.member = findMember;
         comment.board = findBoard;
         comment.content = content;
+        comment.isDeleted = false;
         return comment;
     }
 
     public void updateContent(String updatedContent) {
         content = updatedContent;
+    }
+
+    public void updateDeletedStatus(boolean status) {
+        isDeleted = status;
     }
 }

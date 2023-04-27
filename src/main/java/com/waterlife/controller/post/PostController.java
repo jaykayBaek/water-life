@@ -55,6 +55,10 @@ public class PostController {
         List<NestedCommentDto> nestedComments = nestedCommentService.findByBoardId(boardId);
         model.addAttribute("nestedComments", nestedComments);
 
+        for (NestedCommentDto nestedComment : nestedComments) {
+            log.info("nestedComment={}", nestedComment);
+        }
+
         boardService.addBoardViews(boardId);
         return "post/detail";
     }
