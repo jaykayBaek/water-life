@@ -26,4 +26,9 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
             "join b.comments c " +
             "where c.id = :commentId")
     Optional<Board> findByCommentId(@Param("commentId") Long commentId);
+
+    @Query("select b from Board b " +
+            "join b.nestedComments nc " +
+            "where nc.id = :nestedCommentId")
+    Optional<Board> findByNestedCommentId(@Param("nestedCommentId") Long nestedCommentId);
 }

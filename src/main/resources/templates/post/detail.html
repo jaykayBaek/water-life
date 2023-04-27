@@ -136,7 +136,7 @@
                                 <th:block th:if="${memberId eq nestedComment.memberId}">
                                   <button type="button" class="nested-modify" th:data-nested-comment-id="${nestedComment.nestedCommentId}">수정하기</button>
 
-                                  <button type="button" class="nested-delete" th:data-nested-comment-id="${comment.commentId}">삭제하기</button>
+                                  <button type="button" class="nested-delete" th:data-nested-comment-id="${nestedComment.nestedCommentId}">삭제하기</button>
                                 </th:block>
                               </div>
                             </th:block>
@@ -162,7 +162,7 @@
                                 <th:block th:if="${memberId eq nestedComment.memberId}">
                                   <button type="button" class="nested-modify" th:data-nested-comment-id="${nestedComment.nestedCommentId}">수정하기</button>
 
-                                  <button type="button" class="nested-delete" th:data-nested-comment-id="${comment.commentId}">삭제하기</button>
+                                  <button type="button" class="nested-delete" th:data-nested-comment-id="${nestedComment.nestedCommentId}">삭제하기</button>
                                 </th:block>
                               </div>
                             </th:block>
@@ -275,7 +275,7 @@
                     const commentId = $(this).data('comment-id');
 
                     $.ajax({
-                      method: "delete",
+                      method: "post",
                       url: "http://localhost:8080/comments/"+commentId,
                       success: function (result){
                         console.log(result);
@@ -342,22 +342,22 @@
                   $('.nested-comment__wrap').on("click", ".nested-delete", function (){
                     const commentId = $(this).data('nested-comment-id');
                     console.log("commentId = " + commentId);
-                    // $.ajax({
-                    //   method: "delete",
-                    //   url: "http://localhost:8080/comments/"+commentId,
-                    //   success: function (result){
-                    //     console.log(result);
-                    //     location.reload();
-                    //   },
-                    //   error: function (result){
-                    //     const response = result.responseJSON;
-                    //     console.log(response);
-                    //     if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
-                    //       alert('로그인 이후 사용할 수 있는 서비스입니다.');
-                    //       return false;
-                    //     }
-                    //   }
-                    // })
+                    $.ajax({
+                      method: "delete",
+                      url: "http://localhost:8080/nested-comments/"+commentId,
+                      success: function (result){
+                        console.log(result);
+                        location.reload();
+                      },
+                      error: function (result){
+                        const response = result.responseJSON;
+                        console.log(response);
+                        if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
+                          alert('로그인 이후 사용할 수 있는 서비스입니다.');
+                          return false;
+                        }
+                      }
+                    })
                   });
 
                 });

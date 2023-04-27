@@ -83,9 +83,26 @@ public class BoardService {
         return findBoards.map(board -> new MyWrotePostsDto(board));
     }
 
+    @Transactional
+    public void minusOneCommentTotalCount(Board board){
+        int commentTotalCount = board.getCommentTotalCount();
+        board.updateCommentTotalCount(--commentTotalCount);
+    }
+
+    @Transactional
+    public void plusOneCommentTotalCount(Board board){
+        int commentTotalCount = board.getCommentTotalCount();
+        board.updateCommentTotalCount(++commentTotalCount);
+    }
+
     public Board findBoardByCommentId(Long commentId) {
         return boardRepository.findByCommentId(commentId)
-                .orElseThrow(() -> new BoardException(BoardErrorResult.BOARD_NOT_FOUND_BY_FIND_BOARD_ID));
+                .orElseThrow(() -> new BoardException(BoardErrorResult.BOARD_NOT_FOUND_BY_COMMENT_ID));
 
+    }
+
+    public Board findBoardByNestedCommentId(Long nestedCommentId) {
+        return boardRepository.findByNestedCommentId(nestedCommentId)
+                .orElseThrow(() -> new BoardException(BoardErrorResult.BOARD_NOT_FOUND_BY_COMMENT_ID));
     }
 }

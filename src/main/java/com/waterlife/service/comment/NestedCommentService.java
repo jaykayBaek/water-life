@@ -35,8 +35,7 @@ public class NestedCommentService {
 
         NestedComment nestedComment = NestedComment.createComment(member, board, comment, content);
 
-        int commentTotalCount = board.getCommentTotalCount();
-        board.updateCommentTotalCount(++commentTotalCount);
+        boardService.plusOneCommentTotalCount(board);
 
         return nestedCommentRepository.save(nestedComment).getId();
     }
@@ -67,5 +66,17 @@ public class NestedCommentService {
     public NestedComment findNestedCommentByNestedCommentId(Long nestedCommentId) {
        return nestedCommentRepository.findById(nestedCommentId)
                 .orElseThrow(() -> new CommentException(CommentErrorResult.COMMENT_NOT_FOUND_BY_FIND_COMMENT_ID));
+    }
+
+    @Transactional
+    public void deleteNestedComment(Long memberId, Long nestedCommentId) {
+        Member member = memberService.findMemberByMemberId(memberId);
+        NestedComment nestedComment = findNestedCommentByNestedCommentId(nestedCommentId);
+
+        Board board = boardService.findBoardByNestedCommentId(nestedComment.getId());
+        boardService.minusOneCommentTotalCount(board);
+
+        validateNestedCommentMemberId(member, nestedComment);
+        nestedCommentRepository.delete(nestedComment);
     }
 }

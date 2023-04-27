@@ -44,16 +44,16 @@ public class CommentRestController {
                 .body(resultResponse);
     }
 
-    @DeleteMapping("/{commentId}")
+    @PostMapping("/{commentId}")
     public ResponseEntity<ResultResponse> deleteComment(@PathVariable(name = "commentId") Long commentId,
                                                         @SessionAttribute(name = SessionConst.MEMBER_ID, required = false) Long memberId){
         commentService.deleteComment(memberId, commentId);
 
         ResultResponse resultResponse = new ResultResponse(
-                HttpStatus.NO_CONTENT.toString(), CommentRequestResult.DELETE_SUCCESS.getMessage(), true);
-        
+                HttpStatus.OK.toString(), CommentRequestResult.DELETE_SUCCESS.getMessage(), true);
+
         return ResponseEntity
-                .status(HttpStatus.NO_CONTENT)
+                .status(HttpStatus.OK)
                 .body(resultResponse);
     }
 }

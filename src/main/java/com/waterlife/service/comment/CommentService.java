@@ -38,8 +38,8 @@ public class CommentService {
 
         Comment comment = Comment.createComment(member, board, request.getContent());
 
-        int commentTotalCount = board.getCommentTotalCount();
-        board.updateCommentTotalCount(++commentTotalCount);
+        boardService.plusOneCommentTotalCount(board);
+
         return commentRepository.save(comment).getId();
     }
 
@@ -77,8 +77,7 @@ public class CommentService {
         Comment comment = findCommentByCommentId(commentId);
 
         Board board = boardService.findBoardByCommentId(commentId);
-        int commentTotalCount = board.getCommentTotalCount();
-        board.updateCommentTotalCount(--commentTotalCount);
+        boardService.minusOneCommentTotalCount(board);
 
         validateCommentMemberId(member, comment);
         comment.updateDeletedStatus(true);

@@ -28,6 +28,9 @@ public class Board extends BaseEntity {
     @OneToMany(mappedBy = "board")
     private List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "board")
+    private List<NestedComment> nestedComments = new ArrayList<>();
+
     @Column(length = 500, nullable = false)
     private String title;
 

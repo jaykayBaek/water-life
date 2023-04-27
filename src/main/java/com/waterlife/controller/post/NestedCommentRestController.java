@@ -41,4 +41,17 @@ public class NestedCommentRestController {
                 .status(HttpStatus.CREATED)
                 .body(resultResponse);
     }
+
+    @DeleteMapping("/{nestedCommentId}")
+    public ResponseEntity<ResultResponse> deleteNestedComment(@SessionAttribute(name = SessionConst.MEMBER_ID, required = false) Long memberId,
+                                                              @PathVariable(name = "nestedCommentId") Long nestedCommentId){
+        nestedCommentService.deleteNestedComment(memberId, nestedCommentId);
+
+        ResultResponse resultResponse = new ResultResponse(
+                HttpStatus.NO_CONTENT.toString(), CommentRequestResult.DELETE_SUCCESS.getMessage(), true);
+
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .body(resultResponse);
+    }
 }
