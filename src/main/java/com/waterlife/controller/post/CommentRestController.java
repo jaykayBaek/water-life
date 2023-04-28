@@ -44,7 +44,7 @@ public class CommentRestController {
                 .body(resultResponse);
     }
 
-    @PostMapping("/{commentId}")
+    @DeleteMapping("/{commentId}")
     public ResponseEntity<ResultResponse> deleteComment(@PathVariable(name = "commentId") Long commentId,
                                                         @SessionAttribute(name = SessionConst.MEMBER_ID, required = false) Long memberId){
         commentService.deleteComment(memberId, commentId);

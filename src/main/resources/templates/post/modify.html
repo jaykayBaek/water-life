@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>슬기로운 물생활</title>
+
+  <th:block th:replace="~{common/common-setting :: common-setting}"></th:block>
+
+  <!--  썸머노트 위지윅 에디터 설정  -->
+  <script th:src="@{/wysiwyg/lang/summernote-ko-KR.js}"></script>
+  <script th:src="@{/wysiwyg/summernote-lite.js}"></script>
+  <link rel="stylesheet" th:href="@{/wysiwyg/summernote-lite.css}" type="text/css">
+  <link rel="stylesheet" th:href="@{/css/post/post.css}" type="text/css">
+</head>
+<body>
+<div class="main">
+
+  <th:block th:replace="~{common/header :: header}"></th:block>
+
+  <article class="container mt-3">
+    <form name="posts" method="post" th:action="@{/posts/modify/{boardId}(boardId=${board.boardId})}" enctype="multipart/form-data">
+      <div class="row">
+        <div class="col-10">
+          <div class="title__wrap">
+            <label for="title">제목</label>
+            <input type="text" id="title" name="title" th:value="${board.title}">
+          </div>
+          <div class="content__wrap">
+            <textarea class="editor" name="content" th:utext="${board.content}"></textarea>
+          </div>
+
+          <script>
+            $(function () {
+              $('.editor').summernote({
+                height: 550,
+                lang: "ko-KR",
+                toolbar: [
+                  // 글꼴
+                  ['fontname', ['fontname']],
+                  // 글자 크기
+                  ['fontsize', ['fontsize']],
+                  // 굵기, 기울임꼴, 밑줄, 취소 선, 서식지우기
+                  ['style', ['bold', 'italic', 'underline','strikethrough', 'clear']],
+                  // 글자색
+                  ['color', ['forecolor','color']],
+                  // 표만들기
+                  ['table', ['table']],
+                  // 글머리 기호, 번호매기기, 문단정렬
+                  ['para', ['ul', 'ol', 'paragraph']],
+                  // 줄간격
+                  ['height', ['height']],
+                  // 그림첨부, 링크만들기, 동영상첨부
+                  ['insert',['picture','link','video']],
+                  // 코드보기, 도움말
+                  ['view', ['codeview', 'help']]
+                ],
+                // 추가 글꼴
+                fontNames: ['Pretendard', 'Arial', 'Helvetica', 'Tahoma', 'Times New Roman', 'Verdana'],
+                callbacks : {
+                  onImageUpload : function(files, editor, welEditable) {
+                    for (var i = files.length - 1; i >= 0; i--) {
+                      uploadImage(files[i],
+                              this);
+                    }
+                  }
+                }
+              });
+            })
+
+            function uploadImage(file, el){
+              data = new FormData();
+              data.append("file", file);
+              $.ajax({
+                type : "POST",
+                url: "http://localhost:8080/posts/upload-image",
+                data : data,
+                contentType : false,
+                processData : false,
+                enctype : 'multipart/form-data',
+                success : function(result) {
+                  console.log(result);
+                  $(el).summernote('editor.insertImage', result.url);
+                }
+              })
+            }
+          </script>
+
+        </div>
+        <div class="col-2">
+          <div class="category__wrap">
+            <label for="category">
+              카테고리 선택
+            </label>
+            <select name="category" id="category">
+              <option value="GENERAL" th:selected="${board.categoryName eq '일반'}">일반</option>
+              <option value="QUESTION" th:selected="${board.categoryName eq '질문'}">질문</option>
+              <option value="VISIT" th:selected="${board.categoryName eq '방문기'}">방문기</option>
+              <option value="SHARE" th:selected="${board.categoryName eq '분양'}">분양</option>
+              <option value="AQUARIUM_PICTURE" th:selected="${board.categoryName eq '어항 사진'}">어항 사진</option>
+              <option value="CONTEST" th:selected="${board.categoryName eq '콘테스트'}">콘테스트</option>
+            </select>
+          </div>
+          <div class="category__wrap">
+            <label for="commentable">
+              댓글 설정
+            </label>
+            <select name="commentable" id="commentable">
+              <option value="true" th:selected="${board.commentable}">허용</option>
+              <option value="false" th:selected="${not board.commentable}">비허용</option>
+            </select>
+          </div>
+          <div class="button__wrap">
+            <button type="button" class="write" onclick="writePost(this.form)">수정하기</button>
+            <a th:href="@{/posts/{boardId}(boardId=${board.boardId})}" class="exit" onclick="location.href='/'">나가기</a>
+            <script>
+              function writePost(form){
+                const title = form.title.value;
+
+                if ($('.editor').summernote('isEmpty') || title.trim() == '') {
+                  alert('제목 또는 게시글을 작성해주세요.');
+                  return false;
+                }
+
+                form.submit();
+              }
+            </script>
+          </div>
+        </div>
+      </div>
+    </form>
+  </article>
+
+  <th:block th:replace="~{common/footer :: footer}"></th:block>
+</div>
+</body>
+</html>

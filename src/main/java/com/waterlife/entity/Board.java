@@ -79,4 +79,15 @@ public class Board extends BaseEntity {
     public void updateRecommendable(boolean updatedRecommendable) {
         recommendable = updatedRecommendable;
     }
+
+    public void updateBoard(WritePostRequest request) {
+        title = request.getTitle();
+        category = request.getCategory();
+        content = request.getContent();
+        commentable = request.getCommentable();
+    }
+
+    public void updateDeletedStatus(boolean status) {
+        isDeleted = status;
+    }
 }

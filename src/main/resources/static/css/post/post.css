@@ -36,6 +36,20 @@ button.exit{
     margin-bottom: 8px;
 }
 
+a.exit{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    width: 100%;
+    height: 37px;
+    border: 0px;
+    background-color: var(--mainred);
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+
 .title__wrap label{
     font-size: 14px;
     font-weight: 400

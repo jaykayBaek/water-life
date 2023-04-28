@@ -18,8 +18,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     @Query("select b from Board b " +
             "join b.comments c " +
-            "where c.member.id = :memberId and " +
-            "c.isDeleted = false")
+            "where c.member.id = :memberId and c.isDeleted = false " +
+            "group by b.id")
     Page<Board> findMyWroteComments(@Param("memberId") Long memberId, Pageable pageable);
 
     @Query("select b from Board b " +
@@ -31,4 +31,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
             "join b.nestedComments nc " +
             "where nc.id = :nestedCommentId")
     Optional<Board> findByNestedCommentId(@Param("nestedCommentId") Long nestedCommentId);
+
+    @Query("select b from Board b " +
+            "where b.id = :boardId and b.isDeleted = false")
+    Optional<Board> findByBoardId(@Param("boardId") Long boardId);
 }

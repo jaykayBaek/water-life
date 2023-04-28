@@ -25,8 +25,31 @@
               카테고리 | <span th:text="${board.categoryName}"></span>
             </div>
             <div class="content-block" th:if="${memberId eq board.memberId}">
-              <button class="btn btn-sm btn-outline-dark">수정</button>
-              <button class="btn btn-sm btn-outline-dark">삭제</button>
+              <a th:href="@{/posts/modify/{boardId}(boardId=${board.boardId})}" class="btn btn-sm btn-outline-dark">수정</a>
+              <button class="btn btn-sm btn-outline-dark delete-board" th:data-board-id="${board.boardId}">삭제</button>
+              <script>
+                $('.content-block').on("click", ".delete-board", function (){
+                  const boardId = $(this).data('board-id');
+
+                  $.ajax({
+                    method: "delete",
+                    url: "http://localhost:8080/posts/"+boardId,
+                    success: function (result){
+                      console.log(result);
+                      location.replace("http://localhost:8080/my-info/posts");
+                    },
+                    error: function (result){
+                      const response = result.responseJSON;
+                      console.log(response);
+                      if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
+                        alert('로그인 이후 사용할 수 있는 서비스입니다.');
+                        return false;
+                      }
+                    }
+                  })
+                });
+
+              </script>
             </div>
             <div class="content-block" id="title-block">
               <div class="title__top d-flex justify-content-between">
@@ -275,7 +298,7 @@
                     const commentId = $(this).data('comment-id');
 
                     $.ajax({
-                      method: "post",
+                      method: "delete",
                       url: "http://localhost:8080/comments/"+commentId,
                       success: function (result){
                         console.log(result);

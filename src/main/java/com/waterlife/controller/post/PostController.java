@@ -1,16 +1,20 @@
 package com.waterlife.controller.post;
 
 import com.waterlife.consts.SessionConst;
-import com.waterlife.service.comment.NestedCommentDto;
-import com.waterlife.service.comment.NestedCommentService;
-import com.waterlife.service.utils.MemberInformationUtil;
+import com.waterlife.controller.ResultResponse;
 import com.waterlife.service.board.BoardInformationResponse;
+import com.waterlife.service.board.BoardModifyResponse;
 import com.waterlife.service.board.BoardService;
 import com.waterlife.service.board.WritePostRequest;
 import com.waterlife.service.comment.CommentDto;
 import com.waterlife.service.comment.CommentService;
+import com.waterlife.service.comment.NestedCommentDto;
+import com.waterlife.service.comment.NestedCommentService;
+import com.waterlife.service.utils.MemberInformationUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -46,7 +50,7 @@ public class PostController {
         memberInformationUtil.getMemberInformation(memberId, model);
         model.addAttribute("memberId", memberId);
 
-        BoardInformationResponse board = boardService.findBoardById(boardId);
+        BoardInformationResponse board = boardService.findByBoardId(boardId);
         model.addAttribute("board", board);
 
         List<CommentDto> comments = commentService.findByBoardId(boardId);
@@ -62,4 +66,39 @@ public class PostController {
         boardService.addBoardViews(boardId);
         return "post/detail";
     }
+
+    @GetMapping("/modify/{boardId}")
+    public String updateForm(@SessionAttribute(name = SessionConst.MEMBER_ID, required = false) Long memberId,
+                             @PathVariable("boardId") Long boardId, Model model){
+        BoardModifyResponse response = boardService.modifyForm(memberId, boardId);
+        model.addAttribute("board", response);
+
+        return "post/modify";
+    }
+
+    @PostMapping("/modify/{boardId}")
+    public String updateBoard(@SessionAttribute(name = SessionConst.MEMBER_ID, required = false) Long memberId,
+                                                      @ModelAttribute WritePostRequest request,
+                                                      @PathVariable("boardId") Long boardId){
+        boardService.updatePost(memberId, boardId, request);
+
+        ResultResponse resultResponse = new ResultResponse(
+                HttpStatus.OK.toString(), "게시글 수정 완료", true
+        );
+        return "redirect:/posts/"+boardId;
+    }
+
+    @DeleteMapping("/{boardId}")
+    public ResponseEntity<ResultResponse> deleteBoard(@SessionAttribute(name = SessionConst.MEMBER_ID, required = false) Long memberId,
+                                      @PathVariable("boardId") Long boardId){
+        boardService.deletePost(memberId, boardId);
+
+        ResultResponse resultResponse = new ResultResponse(
+                HttpStatus.OK.toString(), "게시글 삭제 완료", true
+        );
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(resultResponse);
+    }
+
 }

@@ -6,14 +6,13 @@ import com.waterlife.exception.board.BoardErrorResult;
 import com.waterlife.exception.board.BoardException;
 import com.waterlife.repository.BoardRepository;
 import com.waterlife.service.member.MemberService;
+import com.waterlife.service.utils.FileManageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -22,6 +21,7 @@ import java.util.Optional;
 public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberService memberService;
+    private final FileManageUtil fileManageUtil;
 
     /**
      * 게시글 작성 메소드
@@ -39,7 +39,7 @@ public class BoardService {
      * 게시글 열람 메소드
      * @param boardId
      */
-    public BoardInformationResponse findBoardById(Long boardId) {
+    public BoardInformationResponse findByBoardId(Long boardId) {
         Board board = findBoardByBoardId(boardId);
         return BoardInformationResponse.createResponse(board);
     }
@@ -69,7 +69,7 @@ public class BoardService {
         if(boardId == null){
             throw new BoardException(BoardErrorResult.BOARD_NOT_FOUND_BY_FIND_BOARD_ID);
         }
-        return boardRepository.findById(boardId)
+        return boardRepository.findByBoardId(boardId)
                 .orElseThrow(() -> new BoardException(BoardErrorResult.BOARD_NOT_FOUND_BY_FIND_BOARD_ID));
     }
 
@@ -104,5 +104,49 @@ public class BoardService {
     public Board findBoardByNestedCommentId(Long nestedCommentId) {
         return boardRepository.findByNestedCommentId(nestedCommentId)
                 .orElseThrow(() -> new BoardException(BoardErrorResult.BOARD_NOT_FOUND_BY_COMMENT_ID));
+    }
+
+    @Transactional
+    public void updatePost(Long memberId, Long boardId, WritePostRequest request) {
+        Member member = memberService.findMemberByMemberId(memberId);
+        Board board = findBoardByBoardId(boardId);
+
+        fileManageUtil.deleteImagesAccordingToComparison(board.getContent(), request.getContent());
+
+        validateBoardMemberId(member, board);
+        board.updateBoard(request);
+    }
+
+    private void validateBoardMemberId(Member member, Board board) {
+        if(board.getMember().getId() != member.getId()){
+            throw new BoardException(BoardErrorResult.NOT_MATCH_BOARD_MEMBER_ID);
+        }
+    }
+
+    public BoardModifyResponse modifyForm(Long memberId, Long boardId) {
+        Member member = memberService.findMemberByMemberId(memberId);
+        Board board = findBoardByBoardId(boardId);
+
+        validateDeleteCheck(board);
+        validateBoardMemberId(member, board);
+
+        return BoardModifyResponse.createResponse(board);
+    }
+
+    private void validateDeleteCheck(Board board) {
+        Boolean isDeleted = board.getIsDeleted();
+        if(isDeleted == true){
+            throw new BoardException(BoardErrorResult.ALREADY_DELETED_BOARD);
+        }
+    }
+
+    @Transactional
+    public void deletePost(Long memberId, Long boardId) {
+        Member member = memberService.findMemberByMemberId(memberId);
+        Board board = findBoardByBoardId(boardId);
+
+        validateBoardMemberId(member, board);
+        fileManageUtil.deleteImageInContent(board.getContent());
+        board.updateDeletedStatus(true);
     }
 }

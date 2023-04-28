@@ -1,5 +1,9 @@
 package com.waterlife.controller.post;
 
+import com.waterlife.consts.SessionConst;
+import com.waterlife.controller.ResultResponse;
+import com.waterlife.service.board.BoardService;
+import com.waterlife.service.board.WritePostRequest;
 import com.waterlife.service.utils.WysiwygImageUploadUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/posts")
 public class PostRestController {
     private final WysiwygImageUploadUtil uploadUtil;
+    private final BoardService boardService;
 
-    @ResponseBody
     @PostMapping("/upload-image")
     public ResponseEntity<FileUploadResultResponse> uploadImage(@RequestParam(name = "file") MultipartFile file,
                                                                 HttpServletRequest request) {
@@ -33,5 +37,4 @@ public class PostRestController {
                 .status(HttpStatus.OK)
                 .body(resultResponse);
     }
-
 }
