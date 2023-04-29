@@ -18,121 +18,124 @@
   <th:block th:replace="~{common/header :: header}"></th:block>
 
   <article class="container mt-3">
-      <div class="row">
-        <div class="col-9">
-          <div class="content__wrap">
-            <div class="content-block">
-              카테고리 | <span th:text="${board.categoryName}"></span>
-            </div>
-            <div class="content-block" th:if="${memberId eq board.memberId}">
-              <a th:href="@{/posts/modify/{boardId}(boardId=${board.boardId})}" class="btn btn-sm btn-outline-dark">수정</a>
-              <button class="btn btn-sm btn-outline-dark delete-board" th:data-board-id="${board.boardId}">삭제</button>
-              <script>
-                $('.content-block').on("click", ".delete-board", function (){
-                  const boardId = $(this).data('board-id');
+    <div class="row">
+      <div class="col-9">
+        <div class="content__wrap">
+          <div class="content-block">
+            카테고리 | <span th:text="${board.categoryName}"></span>
+          </div>
+          <div class="content-block" th:if="${memberId eq board.memberId}">
+            <button class="btn btn-sm btn-outline-dark">수정</button>
+            <button class="btn btn-sm btn-outline-dark">삭제</button>
+            <a th:href="@{/posts/modify/{boardId}(boardId=${board.boardId})}" class="btn btn-sm btn-outline-dark">수정</a>
+            <button class="btn btn-sm btn-outline-dark delete-board" th:data-board-id="${board.boardId}">삭제</button>
+            <script>
+              $('.content-block').on("click", ".delete-board", function (){
+                const boardId = $(this).data('board-id');
 
-                  $.ajax({
-                    method: "delete",
-                    url: "http://localhost:8080/posts/"+boardId,
-                    success: function (result){
-                      console.log(result);
-                      location.replace("http://localhost:8080/my-info/posts");
-                    },
-                    error: function (result){
-                      const response = result.responseJSON;
-                      console.log(response);
-                      if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
-                        alert('로그인 이후 사용할 수 있는 서비스입니다.');
-                        return false;
-                      }
+                $.ajax({
+                  method: "delete",
+                  url: "http://localhost:8080/posts/"+boardId,
+                  success: function (result){
+                    console.log(result);
+                    location.replace("http://localhost:8080/my-info/posts");
+                  },
+                  error: function (result){
+                    const response = result.responseJSON;
+                    console.log(response);
+                    if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
+                      alert('로그인 이후 사용할 수 있는 서비스입니다.');
+                      return false;
                     }
-                  })
+                  }
+                })
+              });
+
+            </script>
+          </div>
+          <div class="content-block" id="title-block">
+            <div class="title__top d-flex justify-content-between">
+              <h2 class="title" th:text="${board.title}"></h2>
+              <span class="title__bottom-left" th:text="${board.createdTime}"></span>
+            </div>
+            <div class="title__bottom d-flex justify-content-between">
+              <div class="title__bottom-left">
+                <span th:text="${board.nickname}"></span>
+              </div>
+              <div class="title__bottom-right">
+                <span>조회수 <b th:text="${board.views}"></b></span>
+                <span>좋아요 <b th:text="${board.likes}"></b></span>
+              </div>
+            </div>
+          </div>
+          <div class="content-block">
+            <th:block th:utext="${board.content}"></th:block>
+          </div>
+        </div>
+        <div class="btn__likes__box__wrap">
+          <div class="btn__likes__box">
+            <div class="likes__inner">
+              <button class="likes" type="button" onclick="like()">
+                좋아요
+                <i class="fa-solid fa-thumbs-up"></i>
+              </button>
+            </div>
+            <b class="likes" th:text="${board.likes}"></b>
+            <div class="likes__inner">
+              <button class="dislikes" type="button" onclick="dislike()">
+                싫어요
+                <i class="fa-solid fa-thumbs-down"></i>
+              </button>
+            </div>
+            <script>
+              const like = () => {
+                const boardId = [[${board.boardId}]];
+                const isLike = true;
+                likePost(boardId, isLike);
+
+              }
+              const dislike = () => {
+                const boardId = [[${board.boardId}]];
+                const isLike = false;
+                likePost(boardId, isLike);
+
+              }
+              function likePost(boardId, isLike) {
+                $.ajax({
+                  method: "post",
+                  url: "http://localhost:8080/likes",
+                  data: {
+                    boardId: boardId,
+                    isLike: isLike
+                  },
+                  success: function (result) {
+                    console.log(result);
+                    location.reload();
+                  },
+                  error: function (result) {
+                    const response = result.responseJSON;
+                    console.log(response);
+                    if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
+                      alert('로그인 이후 사용할 수 있는 서비스입니다.');
+                      return false;
+                    }
+                    alert(response.message);
+                  }
                 });
-
-              </script>
-            </div>
-            <div class="content-block" id="title-block">
-              <div class="title__top d-flex justify-content-between">
-                <h2 class="title" th:text="${board.title}"></h2>
-                <span class="title__bottom-left" th:text="${board.createdTime}"></span>
-              </div>
-              <div class="title__bottom d-flex justify-content-between">
-                <div class="title__bottom-left">
-                  <span th:text="${board.nickname}"></span>
-                </div>
-                <div class="title__bottom-right">
-                  <span>조회수 <b th:text="${board.views}"></b></span>
-                  <span>좋아요 <b th:text="${board.likes}"></b></span>
-                </div>
-              </div>
-            </div>
-            <div class="content-block">
-              <th:block th:utext="${board.content}"></th:block>
-            </div>
+              }
+            </script>
           </div>
-          <div class="btn__likes__box__wrap">
-            <div class="btn__likes__box">
-              <div class="likes__inner">
-                <button class="likes" type="button" onclick="like()">
-                  좋아요
-                  <i class="fa-solid fa-thumbs-up"></i>
-                </button>
-              </div>
-              <b class="likes" th:text="${board.likes}"></b>
-              <div class="likes__inner">
-                <button class="dislikes" type="button" onclick="dislike()">
-                  싫어요
-                  <i class="fa-solid fa-thumbs-down"></i>
-                </button>
-              </div>
-              <script>
-                const like = () => {
-                  const boardId = [[${board.boardId}]];
-                  const isLike = true;
-                  likePost(boardId, isLike);
-
-                }
-                const dislike = () => {
-                  const boardId = [[${board.boardId}]];
-                  const isLike = false;
-                  likePost(boardId, isLike);
-
-                }
-                function likePost(boardId, isLike) {
-                  $.ajax({
-                    method: "post",
-                    url: "http://localhost:8080/likes",
-                    data: {
-                      boardId: boardId,
-                      isLike: isLike
-                    },
-                    success: function (result) {
-                      console.log(result);
-                      location.reload();
-                    },
-                    error: function (result) {
-                      const response = result.responseJSON;
-                      console.log(response);
-                      if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
-                        alert('로그인 이후 사용할 수 있는 서비스입니다.');
-                        return false;
-                      }
-                      alert(response.message);
-                    }
-                  });
-                }
-              </script>
-            </div>
+        </div>
+        <div class="comment__box__wrap">
+          <div class="content-block total-comment__wrap">
+            전체 댓글 <b class="red" th:text="${board.commentTotalCount}"></b>개
           </div>
-          <div class="comment__box__wrap">
-            <div class="content-block total-comment__wrap">
-              전체 댓글 <b class="red" th:text="${board.commentTotalCount}"></b>개
-            </div>
-            <div class="content-block comment-block">
-              <!--  댓글  -->
-              <ul>
-                <li th:each="comment : ${comments}" class="comment-box" th:data-li-id="${comment.commentId}">
-                  <th:block th:if="${not comment.isDeleted}">
+          <div class="content-block comment-block">
+            <!--  댓글  -->
+            <ul>
+              <th:block th:each="comment : ${comments}">
+                <th:block th:if="${not comment.isDeleted}">
+                  <li class="comment-box" th:data-li-id="${comment.commentId}">
                     <div class="comment-line__wrap">
                       <div class="nickname-box" th:text="${comment.nickname}"></div>
                       <div class="content-box" th:text="${comment.content}"></div>
@@ -167,8 +170,10 @@
                         </ul>
                       </div>
                     </div>
-                  </th:block>
-                  <th:block th:each="nestedComment : ${nestedComments}" th:if="${comment.isDeleted  && nestedComment.commentId eq comment.commentId}">
+                  </li>
+                </th:block>
+                <th:block th:if="${comment.isDeleted && nestedComment.commentId eq comment.commentId}" th:each="nestedComment : ${nestedComments}">
+                  <li class="comment-box" th:data-li-id="${comment.commentId}">
                     <div class="comment-line__wrap">
                       <div class="content-box">
                         삭제된 댓글입니다.
@@ -193,247 +198,249 @@
                         </ul>
                       </div>
                     </div>
-                  </th:block>
-                </li>
-              </ul>
-              <script>
-                $().ready(function() {
-                  // 답글
-                  $('.nested-comment').on("click", function () {
-                    const replyBox = $(this).closest('li').next('.reply-box');
-                    const commentId = $(this).closest('li').data('li-id');
-                    if (replyBox.length) {
-                      replyBox.remove();
-                    } else {
-                      const html = '<li class="reply-box">' +
-                              '<div class="reply-line__wrap">' +
-                              '<textarea class="reply-textarea"></textarea>' +
-                              '<button type="button" class="submit-reply" data-comment-id="'+commentId+'">등록</button>' +
-                              '</div>' +
-                              '</li>';
-                      $(this).closest('li').after(html);
-                    }
-                  });
-                  $(document).on("click", ".submit-reply", function () {
-                    const boardId = [[${board.boardId}]];
-                    const content = $(this).closest('.reply-line__wrap').find('.reply-textarea').val();
-                    const commentId = $(this).closest('.reply-line__wrap').find('.submit-reply').data('comment-id');
-                    if(content.trim() == ''){
-                      alert('댓글을 작성해주세요.');
-                      return false;
-                    }
-                    $.ajax({
-                      type: "post",
-                      url: "http://localhost:8080/nested-comments",
-                      data: {
-                        boardId: boardId,
-                        commentId: commentId,
-                        content: content
-                      },
-                      success: function (result){
-                        console.log(result);
-                        location.reload();
-                      },
-                      error: function (result){
-                        const response = result.responseJSON;
-                        console.log(response);
-                        if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
-                          alert('로그인 이후 사용할 수 있는 서비스입니다.');
-                          return false;
-                        }
-                      }
-                    })
-                  });
-
-                  // 댓글 수정
-                  $('.comment-box').on("click", ".modify", function (){
-                    const $commentBox = $(this).closest('.comment-box');
-                    const commentId = $(this).data('comment-id');
-                    const html = $commentBox.find('.content-box').text();
-                    $commentBox.find('.content-box').data('original-html', html).html(
-                            '<textarea class="form-control modified-comment">'+html+'</textarea>' +
-                            '<button class="btn btn-sm btn-outline-dark confirm" data-comment-id="'+commentId+'">수정</button>' +
-                            '<button class="btn btn-sm btn-outline-dark cancel">취소</button>'
-                    );
-                  });
-                  // 댓글 수정 취소
-                  $('.comment-box').on('click', '.cancel', function() {
-                    const $commentBox = $(this).closest('.comment-box');
-                    const html = $commentBox.find('.content-box').data('original-html');
-                    $commentBox.find('.content-box').html(html);
-                  });
-                  // 댓글 수정 확인
-                  $('.comment-box').on('click', '.confirm', function() {
-                    const commentId = $(this).data('comment-id');
-                    const modifiedContent = $(this).siblings('.modified-comment').val();
-
-                    if(modifiedContent.trim() == ''){
-                      alert('댓글을 작성해주세요.');
-                      return false;
-                    }
-
-                    $.ajax({
-                      method: "patch",
-                      url: "http://localhost:8080/comments/"+commentId,
-                      data: {
-                        content: modifiedContent
-                      },
-                      success: function (result){
-                        console.log(result);
-                        location.reload();
-                      },
-                      error: function (result){
-                        const response = result.responseJSON;
-                        console.log(response);
-                        if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
-                          alert('로그인 이후 사용할 수 있는 서비스입니다.');
-                          return false;
-                        }
-                      }
-                    });
-                  });
-
-                  // 댓글 삭제
-                  $('.comment-box').on("click", ".delete", function (){
-                    const commentId = $(this).data('comment-id');
-
-                    $.ajax({
-                      method: "delete",
-                      url: "http://localhost:8080/comments/"+commentId,
-                      success: function (result){
-                        console.log(result);
-                        location.reload();
-                      },
-                      error: function (result){
-                        const response = result.responseJSON;
-                        console.log(response);
-                        if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
-                          alert('로그인 이후 사용할 수 있는 서비스입니다.');
-                          return false;
-                        }
-                      }
-                    })
-                  });
-
-                  // - - - -  - - - -
-
-                  // 대댓글 수정
-                  $('.nested-comment__wrap').on('click', '.nested-modify', function() {
-                    const $nestedCommentBox = $(this).closest('.nested-comment-box');
-                    const nestedCommentId = $(this).data('nested-comment-id');
-                    const html = $nestedCommentBox.find('.nested-content-box').text();
-                    $nestedCommentBox.find('.nested-content-box').data('original-html', html).html(
-                            '<textarea class="form-control">'+html+'</textarea>' +
-                            '<button class="btn btn-sm btn-outline-dark nested-confirm" data-nested-comment-id="'+nestedCommentId+'">수정</button>' +
-                            '<button class="btn btn-sm btn-outline-dark nested-cancel">취소</button>'
-                    );
-                  });
-
-                  // 대댓글 수정 취소
-                  $('.nested-comment__wrap').on('click', '.nested-cancel', function() {
-                    const $nestedCommentBox = $(this).closest('.nested-comment-box');
-                    const html = $nestedCommentBox.find('.nested-content-box').data('original-html');
-                    $nestedCommentBox.find('.nested-content-box').html(html);
-                  });
-
-                  // 대댓글 수정 확인
-                  $('.nested-comment__wrap').on('click', '.nested-confirm', function() {
-                    const nestedCommentId = $(this).data('nested-comment-id');
-                    const modifiedContent = $(this).prev('textarea').val();
-                    $.ajax({
-                      method: "patch",
-                      url: "http://localhost:8080/nested-comments/"+nestedCommentId,
-                      data: {
-                        content: modifiedContent
-                      },
-                      success: function (result){
-                        console.log(result);
-                        location.reload();
-                      },
-                      error: function (result){
-                        const response = result.responseJSON;
-                        console.log(response);
-                        if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
-                          alert('로그인 이후 사용할 수 있는 서비스입니다.');
-                          return false;
-                        }
-                      }
-                    });
-                  });
-
-                  // 댓글 삭제
-                  $('.nested-comment__wrap').on("click", ".nested-delete", function (){
-                    const commentId = $(this).data('nested-comment-id');
-                    console.log("commentId = " + commentId);
-                    $.ajax({
-                      method: "delete",
-                      url: "http://localhost:8080/nested-comments/"+commentId,
-                      success: function (result){
-                        console.log(result);
-                        location.reload();
-                      },
-                      error: function (result){
-                        const response = result.responseJSON;
-                        console.log(response);
-                        if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
-                          alert('로그인 이후 사용할 수 있는 서비스입니다.');
-                          return false;
-                        }
-                      }
-                    })
-                  });
-
+                  </li>
+                </th:block>
+              </th:block>
+            </ul>
+            <script>
+              $().ready(function() {
+                // 답글
+                $('.nested-comment').on("click", function () {
+                  const replyBox = $(this).closest('li').next('.reply-box');
+                  const commentId = $(this).closest('li').data('li-id');
+                  if (replyBox.length) {
+                    replyBox.remove();
+                  } else {
+                    const html = '<li class="reply-box">' +
+                            '<div class="reply-line__wrap">' +
+                            '<textarea class="reply-textarea"></textarea>' +
+                            '<button type="button" class="submit-reply" data-comment-id="'+commentId+'">등록</button>' +
+                            '</div>' +
+                            '</li>';
+                    $(this).closest('li').after(html);
+                  }
                 });
-              </script>
-            </div>
-            <th:block th:if="${board.commentable eq true}">
-              <div class="content-block comment__write-block">
-                <div class="form-floating">
-                  <textarea class="form-control" id="comments" placeholder="댓글 작성"></textarea>
-                  <label for="comments">댓글 작성</label>
-                  <div class="button__wrap d-flex justify-content-end">
-                    <button type="button" class="btn btn-outline-dark" onclick="writeComment()">
-                      작성하기
-                    </button>
-                    <script th:inline="javascript">
-                      const writeComment = () => {
-                        const content = $('#comments').val();
-                        const boardId = [[${board.boardId}]];
-                        if(content.trim() == ''){
-                          alert('댓글을 작성해주세요.');
-                          return false;
-                        }
-                        $.ajax({
-                          method: "post",
-                          url: "http://localhost:8080/comments",
-                          data: {
-                            content: content,
-                            boardId: boardId
-                          },
-                          success: function (result){
-                            console.log(result);
-                            location.reload();
-                          },
-                          error: function (result){
-                            const response = result.responseJSON;
-                            console.log(response);
-                            if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
-                              alert('로그인을 하셔야 댓글을 작성할 수 있습니다');
-                            }
-                          }
-                        })
+                $(document).on("click", ".submit-reply", function () {
+                  const boardId = [[${board.boardId}]];
+                  const content = $(this).closest('.reply-line__wrap').find('.reply-textarea').val();
+                  const commentId = $(this).closest('.reply-line__wrap').find('.submit-reply').data('comment-id');
+                  if(content.trim() == ''){
+                    alert('댓글을 작성해주세요.');
+                    return false;
+                  }
+                  $.ajax({
+                    type: "post",
+                    url: "http://localhost:8080/nested-comments",
+                    data: {
+                      boardId: boardId,
+                      commentId: commentId,
+                      content: content
+                    },
+                    success: function (result){
+                      console.log(result);
+                      location.reload();
+                    },
+                    error: function (result){
+                      const response = result.responseJSON;
+                      console.log(response);
+                      if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
+                        alert('로그인 이후 사용할 수 있는 서비스입니다.');
+                        return false;
                       }
-                    </script>
-                  </div>
+                    }
+                  })
+                });
+
+                // 댓글 수정
+                $('.comment-box').on("click", ".modify", function (){
+                  const $commentBox = $(this).closest('.comment-box');
+                  const commentId = $(this).data('comment-id');
+                  const html = $commentBox.find('.content-box').text();
+                  $commentBox.find('.content-box').data('original-html', html).html(
+                          '<textarea class="form-control modified-comment">'+html+'</textarea>' +
+                          '<button class="btn btn-sm btn-outline-dark confirm" data-comment-id="'+commentId+'">수정</button>' +
+                          '<button class="btn btn-sm btn-outline-dark cancel">취소</button>'
+                  );
+                });
+                // 댓글 수정 취소
+                $('.comment-box').on('click', '.cancel', function() {
+                  const $commentBox = $(this).closest('.comment-box');
+                  const html = $commentBox.find('.content-box').data('original-html');
+                  $commentBox.find('.content-box').html(html);
+                });
+                // 댓글 수정 확인
+                $('.comment-box').on('click', '.confirm', function() {
+                  const commentId = $(this).data('comment-id');
+                  const modifiedContent = $(this).siblings('.modified-comment').val();
+
+                  if(modifiedContent.trim() == ''){
+                    alert('댓글을 작성해주세요.');
+                    return false;
+                  }
+
+                  $.ajax({
+                    method: "patch",
+                    url: "http://localhost:8080/comments/"+commentId,
+                    data: {
+                      content: modifiedContent
+                    },
+                    success: function (result){
+                      console.log(result);
+                      location.reload();
+                    },
+                    error: function (result){
+                      const response = result.responseJSON;
+                      console.log(response);
+                      if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
+                        alert('로그인 이후 사용할 수 있는 서비스입니다.');
+                        return false;
+                      }
+                    }
+                  });
+                });
+
+                // 댓글 삭제
+                $('.comment-box').on("click", ".delete", function (){
+                  const commentId = $(this).data('comment-id');
+
+                  $.ajax({
+                    method: "post",
+                    method: "delete",
+                    url: "http://localhost:8080/comments/"+commentId,
+                    success: function (result){
+                      console.log(result);
+                      location.reload();
+                    },
+                    error: function (result){
+                      const response = result.responseJSON;
+                      console.log(response);
+                      if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
+                        alert('로그인 이후 사용할 수 있는 서비스입니다.');
+                        return false;
+                      }
+                    }
+                  })
+                });
+
+                // - - - -  - - - -
+
+                // 대댓글 수정
+                $('.nested-comment__wrap').on('click', '.nested-modify', function() {
+                  const $nestedCommentBox = $(this).closest('.nested-comment-box');
+                  const nestedCommentId = $(this).data('nested-comment-id');
+                  const html = $nestedCommentBox.find('.nested-content-box').text();
+                  $nestedCommentBox.find('.nested-content-box').data('original-html', html).html(
+                          '<textarea class="form-control">'+html+'</textarea>' +
+                          '<button class="btn btn-sm btn-outline-dark nested-confirm" data-nested-comment-id="'+nestedCommentId+'">수정</button>' +
+                          '<button class="btn btn-sm btn-outline-dark nested-cancel">취소</button>'
+                  );
+                });
+
+                // 대댓글 수정 취소
+                $('.nested-comment__wrap').on('click', '.nested-cancel', function() {
+                  const $nestedCommentBox = $(this).closest('.nested-comment-box');
+                  const html = $nestedCommentBox.find('.nested-content-box').data('original-html');
+                  $nestedCommentBox.find('.nested-content-box').html(html);
+                });
+
+                // 대댓글 수정 확인
+                $('.nested-comment__wrap').on('click', '.nested-confirm', function() {
+                  const nestedCommentId = $(this).data('nested-comment-id');
+                  const modifiedContent = $(this).prev('textarea').val();
+                  $.ajax({
+                    method: "patch",
+                    url: "http://localhost:8080/nested-comments/"+nestedCommentId,
+                    data: {
+                      content: modifiedContent
+                    },
+                    success: function (result){
+                      console.log(result);
+                      location.reload();
+                    },
+                    error: function (result){
+                      const response = result.responseJSON;
+                      console.log(response);
+                      if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
+                        alert('로그인 이후 사용할 수 있는 서비스입니다.');
+                        return false;
+                      }
+                    }
+                  });
+                });
+
+                // 댓글 삭제
+                $('.nested-comment__wrap').on("click", ".nested-delete", function (){
+                  const commentId = $(this).data('nested-comment-id');
+                  console.log("commentId = " + commentId);
+                  $.ajax({
+                    method: "delete",
+                    url: "http://localhost:8080/nested-comments/"+commentId,
+                    success: function (result){
+                      console.log(result);
+                      location.reload();
+                    },
+                    error: function (result){
+                      const response = result.responseJSON;
+                      console.log(response);
+                      if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
+                        alert('로그인 이후 사용할 수 있는 서비스입니다.');
+                        return false;
+                      }
+                    }
+                  })
+                });
+
+              });
+            </script>
+          </div>
+          <th:block th:if="${board.commentable eq true}">
+            <div class="content-block comment__write-block">
+              <div class="form-floating">
+                <textarea class="form-control" id="comments" placeholder="댓글 작성"></textarea>
+                <label for="comments">댓글 작성</label>
+                <div class="button__wrap d-flex justify-content-end">
+                  <button type="button" class="btn btn-outline-dark" onclick="writeComment()">
+                    작성하기
+                  </button>
+                  <script th:inline="javascript">
+                    const writeComment = () => {
+                      const content = $('#comments').val();
+                      const boardId = [[${board.boardId}]];
+                      if(content.trim() == ''){
+                        alert('댓글을 작성해주세요.');
+                        return false;
+                      }
+                      $.ajax({
+                        method: "post",
+                        url: "http://localhost:8080/comments",
+                        data: {
+                          content: content,
+                          boardId: boardId
+                        },
+                        success: function (result){
+                          console.log(result);
+                          location.reload();
+                        },
+                        error: function (result){
+                          const response = result.responseJSON;
+                          console.log(response);
+                          if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
+                            alert('로그인을 하셔야 댓글을 작성할 수 있습니다');
+                          }
+                        }
+                      })
+                    }
+                  </script>
                 </div>
               </div>
-            </th:block>
-          </div>
-        </div>
-        <div class="col-3">
-          <th:block th:replace="common/login :: login"></th:block>
+            </div>
+          </th:block>
         </div>
       </div>
+      <div class="col-3">
+        <th:block th:replace="common/login :: login"></th:block>
+      </div>
+    </div>
   </article>
 
   <th:block th:replace="~{common/footer :: footer}"></th:block>

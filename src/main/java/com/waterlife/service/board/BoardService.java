@@ -1,10 +1,11 @@
 package com.waterlife.service.board;
 
+import com.waterlife.controller.HomeViewBoardDto;
 import com.waterlife.entity.Board;
 import com.waterlife.entity.Member;
 import com.waterlife.exception.board.BoardErrorResult;
 import com.waterlife.exception.board.BoardException;
-import com.waterlife.repository.BoardRepository;
+import com.waterlife.repository.BoardRepositoryImpl;
 import com.waterlife.service.member.MemberService;
 import com.waterlife.service.utils.FileManageUtil;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +15,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class BoardService {
-    private final BoardRepository boardRepository;
+    private final BoardRepositoryImpl boardRepository;
     private final MemberService memberService;
     private final FileManageUtil fileManageUtil;
 
@@ -148,5 +152,33 @@ public class BoardService {
         validateBoardMemberId(member, board);
         fileManageUtil.deleteImageInContent(board.getContent());
         board.updateDeletedStatus(true);
+    }
+
+    public List<HomeViewBoardDto> findFiveRecommendablePosts() {
+        List<Board> board = boardRepository.findFiveRecommendablePosts();
+        return board.stream()
+                .map(b -> new HomeViewBoardDto(b))
+                .collect(Collectors.toList());
+    }
+
+    public List<HomeViewBoardDto> findFiveQuestionPosts() {
+        List<Board> board = boardRepository.findFiveQuestionPosts();
+        return board.stream()
+                .map(b -> new HomeViewBoardDto(b))
+                .collect(Collectors.toList());
+    }
+
+    public List<HomeViewBoardDto> findFiveGeneralPosts() {
+        List<Board> board = boardRepository.findFiveGeneralPosts();
+        return board.stream()
+                .map(b -> new HomeViewBoardDto(b))
+                .collect(Collectors.toList());
+    }
+
+    public List<HomeViewBoardDto> findFiveNewPosts() {
+        List<Board> board = boardRepository.findFiveNewPosts();
+        return board.stream()
+                .map(b -> new HomeViewBoardDto(b))
+                .collect(Collectors.toList());
     }
 }

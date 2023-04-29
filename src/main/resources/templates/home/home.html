@@ -17,7 +17,111 @@
         <article class="container mt-3">
             <div class="row">
                 <div class="col-9">
-                    ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ
+                    <div class="content__wrap row">
+                        <div class="recommendation__wrap col">
+                            <h3 class="title">
+                                추천
+                            </h3>
+                            <ul class="posts__wrap">
+                                <li th:each="recommendablePost : ${recommendablePosts}">
+                                    <div class="row">
+                                        <div class="col">
+                                            <span th:text="${recommendablePost.nickname}"></span>
+                                            <span th:text="${#strings.substring(recommendablePost.getCreatedTime(), 0, 10)}"></span>
+                                        </div>
+                                        <div class="col text-end">
+                                            <i class="fa-solid fa-eye"></i>
+                                            <span th:text="${recommendablePost.views}"></span>
+                                            <i class="fa-solid fa-thumbs-up"></i>
+                                            <span th:text="${recommendablePost.likes}"></span>
+                                        </div>
+                                    </div>
+                                    <a th:href="@{posts/{boardId}(boardId=${recommendablePost.id})}">
+                                        <span th:text="${recommendablePost.title}"></span>
+                                        [<span th:text="${recommendablePost.commentTotalCount}"></span>]
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="new__wrap col">
+                            <h3 class="title">
+                                새로운 게시글
+                            </h3>
+                            <ul class="posts__wrap">
+                                <li th:each="newPost : ${newPosts}">
+                                    <div class="row">
+                                        <div class="col">
+                                            <span th:text="${newPost.getNickname()}"></span>
+                                            <span th:text="${#strings.substring(newPost.getCreatedTime(), 0, 10)}"></span>
+                                        </div>
+                                        <div class="col text-end">
+                                            <i class="fa-solid fa-eye"></i>
+                                            <span th:text="${newPost.views}"></span>
+                                            <i class="fa-solid fa-thumbs-up"></i>
+                                            <span th:text="${newPost.likes}"></span>
+                                        </div>
+                                    </div>
+                                    <a th:href="@{posts/{boardId}(boardId=${newPost.id})}">
+                                        <span th:text="${newPost.title}"></span>
+                                        [<span th:text="${newPost.commentTotalCount}"></span>]
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="content__wrap row">
+                        <div class="general__wrap col">
+                            <h3 class="title">
+                                일반
+                            </h3>
+                            <ul class="posts__wrap">
+                                <li th:each="generalPost : ${generalPosts}">
+                                    <div class="row">
+                                        <div class="col">
+                                            <span th:text="${generalPost.getNickname()}"></span>
+                                            <span th:text="${#strings.substring(generalPost.getCreatedTime(), 0, 10)}"></span>
+                                        </div>
+                                        <div class="col text-end">
+                                            <i class="fa-solid fa-eye"></i>
+                                            <span th:text="${generalPost.views}"></span>
+                                            <i class="fa-solid fa-thumbs-up"></i>
+                                            <span th:text="${generalPost.likes}"></span>
+                                        </div>
+                                    </div>
+                                    <a th:href="@{posts/{boardId}(boardId=${generalPost.id})}">
+                                        <span th:text="${generalPost.title}"></span>
+                                        [<span th:text="${generalPost.commentTotalCount}"></span>]
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="question__wrap col">
+                            <h3 class="title">
+                                질문
+                            </h3>
+                            <ul class="posts__wrap">
+                                <li th:each="questionPost : ${questionPosts}">
+                                    <div class="row">
+                                        <div class="col">
+                                            <span th:text="${questionPost.getNickname()}"></span>
+                                            <span th:text="${#strings.substring(questionPost.getCreatedTime(), 0, 10)}"></span>
+                                        </div>
+                                        <div class="col text-end">
+                                            <i class="fa-solid fa-eye"></i>
+                                            <span th:text="${questionPost.views}"></span>
+                                            <i class="fa-solid fa-thumbs-up"></i>
+                                            <span th:text="${questionPost.likes}"></span>
+                                        </div>
+                                    </div>
+                                    <a th:href="@{posts/{boardId}(boardId=${questionPost.id})}">
+                                        <span th:text="${questionPost.title}"></span>
+                                        [<span th:text="${questionPost.commentTotalCount}"></span>]
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="col-3">
                     <th:block th:replace="common/login :: login"></th:block>
