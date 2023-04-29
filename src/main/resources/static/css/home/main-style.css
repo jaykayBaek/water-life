@@ -185,5 +185,5 @@ a:hover{
 
 ul.posts__wrap li{
     border-bottom: 1px solid var(--grey);
-
+    margin-bottom: 16px;
 }

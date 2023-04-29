@@ -1,11 +1,13 @@
 package com.waterlife.service.board;
 
 import com.waterlife.controller.HomeViewBoardDto;
+import com.waterlife.controller.post.SearchCond;
 import com.waterlife.entity.Board;
 import com.waterlife.entity.Member;
 import com.waterlife.exception.board.BoardErrorResult;
 import com.waterlife.exception.board.BoardException;
-import com.waterlife.repository.BoardRepositoryImpl;
+import com.waterlife.repository.BoardRepository;
+import com.waterlife.repository.SearchBoardDto;
 import com.waterlife.service.member.MemberService;
 import com.waterlife.service.utils.FileManageUtil;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +25,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class BoardService {
-    private final BoardRepositoryImpl boardRepository;
+    private final BoardRepository boardRepository;
     private final MemberService memberService;
     private final FileManageUtil fileManageUtil;
 
@@ -180,5 +182,9 @@ public class BoardService {
         return board.stream()
                 .map(b -> new HomeViewBoardDto(b))
                 .collect(Collectors.toList());
+    }
+
+    public Page<SearchBoardDto> getBoardSearchResult(SearchCond searchCond, Pageable pageable) {
+        return boardRepository.getBoardSearchResult(searchCond, pageable);
     }
 }

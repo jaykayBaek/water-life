@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>슬기로운 물생활</title>
+
+  <th:block th:replace="~{common/common-setting :: common-setting}"></th:block>
+  <link rel="stylesheet" th:href="@{/css/post/search.css}" type="text/css">
+</head>
+<body>
+<div class="main">
+
+  <th:block th:replace="~{common/header :: header}"></th:block>
+
+  <article class="container mt-3">
+    <div class="row">
+      <div class="col-9">
+        <div>
+          <div class="content__wrap">
+            <h3 class="title">
+              검색 결과
+            </h3>
+            <th:block th:if="${boards.content.isEmpty()}">
+              검색 결과가 없습니다.
+            </th:block>
+            <th:block th:if="${not boards.content.isEmpty()}">
+              <ul class="posts__wrap">
+                <li th:each="board : ${boards}">
+                  <div class="row">
+                    <div class="col">
+                      <span th:text="${board.nickname}"></span>
+                      <span th:text="${#strings.substring(board.getCreatedTime(), 0, 10)}"></span>
+                    </div>
+                    <div class="col text-end">
+                      <i class="fa-solid fa-eye"></i>
+                      <span th:text="${board.views}"></span>
+                      <i class="fa-solid fa-thumbs-up"></i>
+                      <span th:text="${board.likes}"></span>
+                    </div>
+                  </div>
+                  <a th:href="@{posts/{boardId}(boardId=${board.id})}">
+                    <span th:text="${board.title}"></span>
+                    [<span th:text="${board.commentTotalCount}"></span>]
+                  </a>
+                </li>
+              </ul>
+            </th:block>
+
+            <nav aria-label="Page navigation" class="text-center mt-3 mb-3" style="width:100%">
+              <ul class="pagination">
+                <li class="page-item">
+                  <a th:class="${boards.first ? 'page-link disabled' : 'page-link'}" th:href="@{/posts(page=0)}">처음</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="#">이전</a>
+                </li>
+                <li class="page-item" th:each="i : ${#numbers.sequence(1, 5)}">
+                  <a class="page-link" href="#" th:text="${boards.number+1}">1</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="#">다음</a>
+                </li>
+                <li class="page-item">
+                  <a th:class="${boards.last ? 'page-link disabled' : 'page-link'}" th:href="@{/posts(page=${boards.totalPages - 1})}">끝</a>
+                </li>
+              </ul>
+            </nav>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <th:block th:replace="common/login :: login"></th:block>
+      </div>
+    </div>
+  </article>
+
+  <th:block th:replace="~{common/footer :: footer}"></th:block>
+</div>
+</body>
+</html>

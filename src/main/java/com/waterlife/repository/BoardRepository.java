@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface BoardRepositoryImpl extends JpaRepository<Board, Long>, HomeRepository {
+public interface BoardRepository extends JpaRepository<Board, Long>, HomeRepository, BoardSearchRepository {
     @Query("select b from Board b " +
             "join b.member m on m.id = :memberId " +
             "where b.isDeleted = false " +

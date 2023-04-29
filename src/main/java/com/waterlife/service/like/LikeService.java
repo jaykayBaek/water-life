@@ -7,7 +7,7 @@ import com.waterlife.entity.Member;
 import com.waterlife.exception.like.LikeErrorResult;
 import com.waterlife.exception.like.LikeException;
 import com.waterlife.repository.BoardLikesLogRepository;
-import com.waterlife.repository.BoardRepositoryImpl;
+import com.waterlife.repository.BoardRepository;
 import com.waterlife.service.board.BoardService;
 import com.waterlife.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import java.util.Optional;
 @Slf4j
 @Transactional(readOnly = true)
 public class LikeService {
-    private final BoardRepositoryImpl boardRepository;
+    private final BoardRepository boardRepository;
     private final BoardLikesLogRepository boardLikesLogRepository;
     private final MemberService memberService;
     private final BoardService boardService;

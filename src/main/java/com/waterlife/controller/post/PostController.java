@@ -2,6 +2,7 @@ package com.waterlife.controller.post;
 
 import com.waterlife.consts.SessionConst;
 import com.waterlife.controller.ResultResponse;
+import com.waterlife.repository.SearchBoardDto;
 import com.waterlife.service.board.BoardInformationResponse;
 import com.waterlife.service.board.BoardModifyResponse;
 import com.waterlife.service.board.BoardService;
@@ -13,6 +14,9 @@ import com.waterlife.service.comment.NestedCommentService;
 import com.waterlife.service.utils.MemberInformationUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -89,6 +93,7 @@ public class PostController {
     }
 
     @DeleteMapping("/{boardId}")
+    @ResponseBody
     public ResponseEntity<ResultResponse> deleteBoard(@SessionAttribute(name = SessionConst.MEMBER_ID, required = false) Long memberId,
                                       @PathVariable("boardId") Long boardId){
         boardService.deletePost(memberId, boardId);
@@ -100,5 +105,29 @@ public class PostController {
                 .status(HttpStatus.OK)
                 .body(resultResponse);
     }
+
+    @GetMapping("")
+    public String search(@SessionAttribute(name = SessionConst.MEMBER_ID, required = false) Long memberId,
+                         @ModelAttribute SearchCond searchCond,
+                         @PageableDefault(size = 2) Pageable pageable, Model model){
+        memberInformationUtil.getMemberInformation(memberId, model);
+
+        Page<SearchBoardDto> boards = boardService.getBoardSearchResult(searchCond, pageable);
+        model.addAttribute("boards", boards);
+        PagingResponse response = new PagingResponse(boards);
+        model.addAttribute("response", response);
+
+        return "post/search";
+    }
+
+//    @GetMapping("")
+//    @ResponseBody
+//    public Page<SearchBoardDto> search(@SessionAttribute(name = SessionConst.MEMBER_ID, required = false) Long memberId,
+//                                       @ModelAttribute SearchCond searchCond,
+//                                       @PageableDefault(size = 3) Pageable pageable, Model model){
+//        memberInformationUtil.getMemberInformation(memberId, model);
+//
+//        return boardService.getBoardSearchResult(searchCond, pageable);
+//    }
 
 }

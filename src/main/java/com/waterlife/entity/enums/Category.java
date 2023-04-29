@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Category {
     GENERAL("일반"), QUESTION("질문"), VISIT("방문기"),
-    SHARE("분양"), AQUARIUM_PICTURE("어항 사진"), CONTEST("콘테스트");
+    SHARE("분양"), AQUARIUM_PICTURE("어항 사진"), CONTEST("콘테스트"),
+    NOTIFICATION("공지");
 
     private final String description;
 }
