@@ -1,3 +1,13 @@
-.posts__wrap{
+.content__wrap{
     min-height: 100vh;
+}
+
+nav ul.pagination{
+    margin: 16px;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul.pagination li a{
+    color: var(--maincolor)
 }

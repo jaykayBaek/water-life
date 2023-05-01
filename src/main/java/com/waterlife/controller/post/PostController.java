@@ -109,7 +109,7 @@ public class PostController {
     @GetMapping("")
     public String search(@SessionAttribute(name = SessionConst.MEMBER_ID, required = false) Long memberId,
                          @ModelAttribute SearchCond searchCond,
-                         @PageableDefault(size = 2) Pageable pageable, Model model){
+                         @PageableDefault(size = 15) Pageable pageable, Model model){
         memberInformationUtil.getMemberInformation(memberId, model);
 
         Page<SearchBoardDto> boards = boardService.getBoardSearchResult(searchCond, pageable);
