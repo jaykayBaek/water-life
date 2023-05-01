@@ -23,14 +23,52 @@
         <div class="content__wrap">
           <div class="content-block">
             카테고리 | <span th:text="${board.categoryName}"></span>
+            <th:block th:if="${session.memberId ne null and member.isAdmin eq true}">
+              <button class="btn btn-sm btn-outline-dark admin-delete-board"
+                      th:data-board-id="${board.boardId}">
+                관리자권한 삭제
+              </button>
+              <script>
+                $('.content-block').on("click", ".admin-delete-board", function (){
+                  const ans = confirm("게시글을 삭제하시겠습니까?");
+
+                  if(ans == false){
+                    return false;
+                  }
+
+                  const boardId = $(this).data('board-id');
+
+                  $.ajax({
+                    method: "delete",
+                    url: "http://localhost:8080/posts/admin/"+boardId,
+                    success: function (result){
+                      console.log(result);
+                      location.replace("http://localhost:8080/");
+                    },
+                    error: function (result){
+                      const response = result.responseJSON;
+                      console.log(response);
+                      if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
+                        alert('로그인 이후 사용할 수 있는 서비스입니다.');
+                        return false;
+                      }
+                    }
+                  })
+                });
+              </script>
+            </th:block>
           </div>
           <div class="content-block" th:if="${memberId eq board.memberId}">
-            <button class="btn btn-sm btn-outline-dark">수정</button>
-            <button class="btn btn-sm btn-outline-dark">삭제</button>
             <a th:href="@{/posts/modify/{boardId}(boardId=${board.boardId})}" class="btn btn-sm btn-outline-dark">수정</a>
             <button class="btn btn-sm btn-outline-dark delete-board" th:data-board-id="${board.boardId}">삭제</button>
             <script>
               $('.content-block').on("click", ".delete-board", function (){
+                const ans = confirm("게시글을 삭제하시겠습니까?");
+
+                if(ans == false){
+                  return false;
+                }
+
                 const boardId = $(this).data('board-id');
 
                 $.ajax({
@@ -50,7 +88,6 @@
                   }
                 })
               });
-
             </script>
           </div>
           <div class="content-block" id="title-block">

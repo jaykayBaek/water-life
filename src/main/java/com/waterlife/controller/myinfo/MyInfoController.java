@@ -28,6 +28,7 @@ public class MyInfoController {
     public String myInfo(){
         return "my-info/my-info";
     }
+
     @GetMapping("/posts")
     public String myWritePosts(@SessionAttribute(name = SessionConst.MEMBER_ID, required = false) Long memberId, Model model,
                                @PageableDefault(size = 15, sort = "id") Pageable pageable){

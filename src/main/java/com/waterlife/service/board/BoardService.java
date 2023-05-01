@@ -4,6 +4,7 @@ import com.waterlife.controller.HomeViewBoardDto;
 import com.waterlife.controller.post.SearchCond;
 import com.waterlife.entity.Board;
 import com.waterlife.entity.Member;
+import com.waterlife.entity.enums.Ranking;
 import com.waterlife.exception.board.BoardErrorResult;
 import com.waterlife.exception.board.BoardException;
 import com.waterlife.repository.BoardRepository;
@@ -147,11 +148,16 @@ public class BoardService {
     }
 
     @Transactional
-    public void deletePost(Long memberId, Long boardId) {
+    public void deleteOwnPost(Long memberId, Long boardId) {
         Member member = memberService.findMemberByMemberId(memberId);
         Board board = findBoardByBoardId(boardId);
 
         validateBoardMemberId(member, board);
+
+        deletePost(board);
+    }
+
+    private void deletePost(Board board) {
         fileManageUtil.deleteImageInContent(board.getContent());
         board.updateDeletedStatus(true);
     }
@@ -186,5 +192,17 @@ public class BoardService {
 
     public Page<SearchBoardDto> getBoardSearchResult(SearchCond searchCond, Pageable pageable) {
         return boardRepository.getBoardSearchResult(searchCond, pageable);
+    }
+
+    @Transactional
+    public void deletePostWithAdminPermission(Long memberId, Long boardId) {
+        Member member = memberService.findMemberByMemberId(memberId);
+        Board board = findBoardByBoardId(boardId);
+
+        if(!member.getRanking().equals(Ranking.ADMIN)){
+            throw new BoardException(BoardErrorResult.NOT_MATCH_BOARD_MEMBER_ID);
+        }
+
+        deletePost(board);
     }
 }

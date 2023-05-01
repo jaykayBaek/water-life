@@ -45,6 +45,12 @@
                     <span th:text="${board.title}"></span>
                     [<span th:text="${board.commentTotalCount}"></span>]
                   </a>
+                  <th:block th:if="${session.memberId ne null and member.isAdmin eq true}">
+                    <button class="btn btn-sm btn-outline-dark delete-board"
+                            th:data-board-id="${board.id}">
+                      관리자권한 삭제
+                    </button>
+                  </th:block>
                 </li>
               </ul>
 
@@ -87,6 +93,28 @@
 
             </th:block>
 
+            <script>
+              $('.delete-board').on("click", function (){
+                const boardId = $(this).data('board-id');
+
+                $.ajax({
+                  method: "delete",
+                  url: "http://localhost:8080/posts/admin/"+boardId,
+                  success: function (result){
+                    console.log(result);
+                    location.replace("http://localhost:8080/");
+                  },
+                  error: function (result){
+                    const response = result.responseJSON;
+                    console.log(response);
+                    if(response.code == '404 NOT_FOUND' || response.message == "일치하는 회원정보가 없습니다."){
+                      alert('로그인 이후 사용할 수 있는 서비스입니다.');
+                      return false;
+                    }
+                  }
+                })
+              })
+            </script>
 
           </div>
         </div>

@@ -96,7 +96,7 @@ public class PostController {
     @ResponseBody
     public ResponseEntity<ResultResponse> deleteBoard(@SessionAttribute(name = SessionConst.MEMBER_ID, required = false) Long memberId,
                                       @PathVariable("boardId") Long boardId){
-        boardService.deletePost(memberId, boardId);
+        boardService.deleteOwnPost(memberId, boardId);
 
         ResultResponse resultResponse = new ResultResponse(
                 HttpStatus.OK.toString(), "게시글 삭제 완료", true
@@ -120,14 +120,17 @@ public class PostController {
         return "post/search";
     }
 
-//    @GetMapping("")
-//    @ResponseBody
-//    public Page<SearchBoardDto> search(@SessionAttribute(name = SessionConst.MEMBER_ID, required = false) Long memberId,
-//                                       @ModelAttribute SearchCond searchCond,
-//                                       @PageableDefault(size = 3) Pageable pageable, Model model){
-//        memberInformationUtil.getMemberInformation(memberId, model);
-//
-//        return boardService.getBoardSearchResult(searchCond, pageable);
-//    }
+    @DeleteMapping("/admin/{boardId}")
+    public ResponseEntity<ResultResponse> adminDeleteBoard(@SessionAttribute(name = SessionConst.MEMBER_ID, required = false) Long memberId,
+                                                      @PathVariable("boardId") Long boardId){
+        boardService.deletePostWithAdminPermission(memberId, boardId);
+
+        ResultResponse resultResponse = new ResultResponse(
+                HttpStatus.OK.toString(), "게시글 삭제 완료", true
+        );
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(resultResponse);
+    }
 
 }
