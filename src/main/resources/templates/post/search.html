@@ -58,13 +58,13 @@
                   </li>
                   <li class="page-item">
                     <a th:class="${boards.first ? 'page-link disabled' : 'page-link'}"
-                       th:href="@{posts(page=${response.prevBlock})}" aria-label="Previous">
+                       th:href="@{posts(page=${response.getPageInPrevBlock})}" aria-label="Previous">
                       <span aria-hidden="true">이전</span>
                     </a>
                   </li>
-                  <th:block th:with="start = ${response.startPage}, end = ${response.lastPage}">
+                  <th:block th:with="start = ${response.getStartPageInThisBlock}, end = ${response.getLastPageInThisBlock}">
                     <li class="page-item"
-                        th:with="start = ${response.startPage}, end = ${response.lastPage}"
+                        th:with="start = ${response.getStartPageInThisBlock}, end = ${response.getLastPageInThisBlock}"
                         th:each="pageButton : ${#numbers.sequence(start, end)}">
                       <a class="page-link" th:href="@{posts(page=${pageButton}-1)}" th:text="${pageButton}"></a>
                     </li>
@@ -72,7 +72,7 @@
                   <li class="page-item">
                     <a class="page-link"
                        th:class="${boards.last ? 'page-link disabled' : 'page-link'}"
-                       th:href="@{/posts(page=${response.nextBlock})}" aria-label="Next">
+                       th:href="@{/posts(page=${response.getPageInNextBlock})}" aria-label="Next">
                       <span aria-hidden="true">다음</span>
                     </a>
                   </li>
