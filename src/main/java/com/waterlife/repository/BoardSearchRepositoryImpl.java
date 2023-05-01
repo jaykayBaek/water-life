@@ -42,7 +42,8 @@ public class BoardSearchRepositoryImpl implements BoardSearchRepository{
                 .where(
                         titleEq(searchCond.getQuery()),
                         categoryEq(searchCond.getCategory()),
-                        isRecommendable(searchCond.getIsRecommendable())
+                        isRecommendable(searchCond.getIsRecommendable()),
+                        board.isDeleted.isFalse()
                 )
                 .orderBy(board.id.desc())
                 .offset(pageable.getOffset())
@@ -56,7 +57,8 @@ public class BoardSearchRepositoryImpl implements BoardSearchRepository{
                 .where(
                         titleEq(searchCond.getQuery()),
                         categoryEq(searchCond.getCategory()),
-                        isRecommendable(searchCond.getIsRecommendable())
+                        isRecommendable(searchCond.getIsRecommendable()),
+                        board.isDeleted.isFalse()
                 );
         return new PageImpl<SearchBoardDto>(content, pageable, total.fetchOne());
     }
