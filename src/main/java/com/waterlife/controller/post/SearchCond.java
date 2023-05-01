@@ -9,4 +9,5 @@ import lombok.Setter;
 public class SearchCond {
     private String query;
     private Category category;
+    private Boolean isRecommendable;
 }

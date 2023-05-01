@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import javax.persistence.EntityManager;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.waterlife.entity.QBoard.*;
 import static com.waterlife.entity.QMember.*;
@@ -40,7 +41,8 @@ public class BoardSearchRepositoryImpl implements BoardSearchRepository{
                 .leftJoin(board.member, member)
                 .where(
                         titleEq(searchCond.getQuery()),
-                        categoryEq(searchCond.getCategory())
+                        categoryEq(searchCond.getCategory()),
+                        isRecommendable(searchCond.getIsRecommendable())
                 )
                 .orderBy(board.id.desc())
                 .offset(pageable.getOffset())
@@ -53,9 +55,20 @@ public class BoardSearchRepositoryImpl implements BoardSearchRepository{
                 .leftJoin(board.member, member)
                 .where(
                         titleEq(searchCond.getQuery()),
-                        categoryEq(searchCond.getCategory())
+                        categoryEq(searchCond.getCategory()),
+                        isRecommendable(searchCond.getIsRecommendable())
                 );
         return new PageImpl<SearchBoardDto>(content, pageable, total.fetchOne());
+    }
+
+    private BooleanExpression isRecommendable(Boolean isRecommendable) {
+        boolean isEmpty = Optional.ofNullable(isRecommendable).isEmpty();
+
+        if(isEmpty == true){
+            return null;
+        }
+
+        return board.recommendable.eq(true);
     }
 
     private BooleanExpression categoryEq(Category category) {
