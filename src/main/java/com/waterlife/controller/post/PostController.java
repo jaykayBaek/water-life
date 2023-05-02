@@ -36,7 +36,9 @@ public class PostController {
     private final MemberInformationUtil memberInformationUtil;
 
     @GetMapping("/new")
-    public String writePage(){
+    public String writePage(@SessionAttribute(name = SessionConst.MEMBER_ID, required = false) Long memberId,
+                            Model model){
+        memberInformationUtil.getMemberInformation(memberId, model);
         return "post/post";
     }
 

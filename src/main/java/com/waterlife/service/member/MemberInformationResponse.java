@@ -19,7 +19,7 @@ public class MemberInformationResponse {
         response.nickname = member.getNickname();
         response.ranking = member.getRanking().getDescription();
 
-        if(member.getRanking().equals(Ranking.ADMIN)){
+        if(member.getRanking() == Ranking.ADMIN){
             response.isAdmin = true;
         } else{
             response.isAdmin = false;

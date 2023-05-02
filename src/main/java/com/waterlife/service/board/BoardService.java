@@ -199,7 +199,7 @@ public class BoardService {
         Member member = memberService.findMemberByMemberId(memberId);
         Board board = findBoardByBoardId(boardId);
 
-        if(!member.getRanking().equals(Ranking.ADMIN)){
+        if(member.getRanking() != Ranking.ADMIN){
             throw new BoardException(BoardErrorResult.NOT_MATCH_BOARD_MEMBER_ID);
         }
 

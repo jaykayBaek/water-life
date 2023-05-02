@@ -101,6 +101,9 @@
                             <option value="SHARE">분양</option>
                             <option value="AQUARIUM_PICTURE">어항 사진</option>
                             <option value="CONTEST">콘테스트</option>
+                            <th:block th:if="${member.isAdmin == true}">
+                                <option value="NOTIFICATION">공지사항</option>
+                            </th:block>
                         </select>
                     </div>
                     <div class="category__wrap">
