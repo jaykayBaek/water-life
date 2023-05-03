@@ -79,6 +79,8 @@ public class PostController {
         BoardModifyResponse response = boardService.modifyForm(memberId, boardId);
         model.addAttribute("board", response);
 
+        memberInformationUtil.getMemberInformation(memberId, model);
+
         return "post/modify";
     }
 

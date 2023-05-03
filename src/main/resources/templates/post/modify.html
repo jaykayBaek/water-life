@@ -101,6 +101,9 @@
               <option value="SHARE" th:selected="${board.categoryName eq '분양'}">분양</option>
               <option value="AQUARIUM_PICTURE" th:selected="${board.categoryName eq '어항 사진'}">어항 사진</option>
               <option value="CONTEST" th:selected="${board.categoryName eq '콘테스트'}">콘테스트</option>
+              <th:block th:if="${member.isAdmin == true}" th:selected="${board.categoryName eq '공지사항'}">
+                <option value="NOTIFICATION">공지사항</option>
+              </th:block>
             </select>
           </div>
           <div class="category__wrap">

@@ -155,6 +155,10 @@ footer .footer__bottom__wrap .footer__bottom-left a{
     color: #555;
 }
 
+.content__wrap{
+    min-height: 35vh;
+}
+
 .content__wrap .col h3.title{
     color: #555;
     font-size: 18px;
